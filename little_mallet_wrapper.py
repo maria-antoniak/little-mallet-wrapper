@@ -56,7 +56,11 @@ def process_string(text):
 
 
 def train_topic_model(mallet_path,
-                      output_directory_path,
+                      training_data_path,
+                      formatted_training_data_path,
+                      model_path,
+                      topic_keys_path,
+                      topic_distributions_path,
                       training_documents,
                       num_topics):
 
@@ -216,3 +220,20 @@ def divide_training_data(documents, num_chunks=10):
             t += 1
         
     return divided_documents, document_ids, times
+
+
+def infer_topics(original_training_data_path,
+                 model_path,
+                 output_directory_path):
+
+    print('Importing data...')
+    os.system(mallet_path + ' import-file --input ' + new_training_data_path 
+                                      + ' --output ' + formatted_training_data_path \
+                                      + ' --keep-sequence' \
+                                      + ' --use-pipe-from' + original_training_data_path)
+
+    print('Inferring topics using pre-trained model...')
+    os.system(mallet_path + ' infer-topics --input ' + formatted_training_data_path \
+                                       + ' --num-iterations 100' \
+                                       + ' --inferencer ' + model_path \
+                                       + ' --output-doc-topics ' + topic_distributions_path)
