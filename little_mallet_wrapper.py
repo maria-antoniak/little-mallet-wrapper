@@ -64,27 +64,21 @@ def train_topic_model(mallet_path,
                       training_documents,
                       num_topics):
 
-    training_data_path = output_directory_path + '/training.txt'
-    formatted_training_data_path = output_directory_path + '/mallet.training'
-    model_path = output_directory_path + '/mallet.model.' + str(num_topics)
-    topic_keys_path = output_directory_path + '/mallet.topic_keys.' + str(num_topics)
-    topic_distributions_path = output_directory_path + '/mallet.topic_distributions.' + str(num_topics)
-
     training_data_file = open(training_data_path, 'w')
     for i, d in enumerate(training_documents):
         training_data_file.write(str(i) + ' ' + str(i) + ' ' + d + '\n')
 
     print('Importing data...')
-    os.system(mallet_path + ' import-file --input ' + training_data_path 
-                                      + ' --output ' + formatted_training_data_path \
+    os.system(mallet_path + ' import-file --input "' + training_data_path + '"' 
+                                      + ' --output "' + formatted_training_data_path + '"' \
                                       + ' --keep-sequence')
 
     print('Training topic model...')
-    os.system(mallet_path + ' train-topics --input ' + formatted_training_data_path \
+    os.system(mallet_path + ' train-topics --input "' + formatted_training_data_path + '"' \
                                        + ' --num-topics ' + str(num_topics) \
-                                       + ' --inferencer-filename ' + model_path \
-                                       + ' --output-topic-keys ' + topic_keys_path \
-                                       + ' --output-doc-topics ' + topic_distributions_path)
+                                       + ' --inferencer-filename "' + model_path + '"' \
+                                       + ' --output-topic-keys "' + topic_keys_path + '"' \
+                                       + ' --output-doc-topics "' + topic_distributions_path + '"')
 
     print('Removing temporary files...')
     os.remove(training_data_path)
@@ -222,7 +216,8 @@ def divide_training_data(documents, num_chunks=10):
     return divided_documents, document_ids, times
 
 
-def infer_topics(original_training_data_path,
+def infer_topics(mallet_path,
+                 original_training_data_path,
                  model_path,
                  output_directory_path):
 
