@@ -61,11 +61,11 @@ def train_topic_model(mallet_path,
                       model_path,
                       topic_keys_path,
                       topic_distributions_path,
-                      training_documents,
+                      training_data,
                       num_topics):
 
     training_data_file = open(training_data_path, 'w')
-    for i, d in enumerate(training_documents):
+    for i, d in enumerate(training_data):
         training_data_file.write(str(i) + ' ' + str(i) + ' ' + d + '\n')
 
     print('Importing data...')
@@ -79,10 +79,6 @@ def train_topic_model(mallet_path,
                                        + ' --inferencer-filename "' + model_path + '"' \
                                        + ' --output-topic-keys "' + topic_keys_path + '"' \
                                        + ' --output-doc-topics "' + topic_distributions_path + '"')
-
-    print('Removing temporary files...')
-    os.remove(training_data_path)
-    os.remove(formatted_training_data_path)
 
 
 def load_topic_keys(topic_keys_path):
@@ -170,33 +166,6 @@ def plot_categories_by_topic_boxplots(labels,
     plt.show()
 
 
-def plot_topics_over_time(topic_distributions, topics, times, topic_index, output_path=None):
-    
-    data_dicts = []
-    for j, _distribution in enumerate(topic_distributions):        
-        for _topic, _probability in enumerate(_distribution):
-            if _topic == topic_index:
-                data_dicts.append({'Probability': _probability,
-                                   'Time': times[j]})
-    data_df = pd.DataFrame(data_dicts)
-
-    sns.set(style='ticks', font_scale=1.4)
-    plt.figure(figsize=(7,2.5))
-    sns.pointplot(data=data_df, 
-                  x='Time', 
-                  y='Probability', 
-                  color='cornflowerblue', 
-                  errwidth=0)
-    plt.xlabel('Time')
-    plt.ylabel('Topic Probability')
-    plt.title(' '.join(topics[topic_index][:5]))
-    plt.tight_layout()
-    sns.despine()
-    if output_path:
-        plt.savefig(output_path)
-    plt.show()
-
-
 def divide_training_data(documents, num_chunks=10):
 
     divided_documents = []
@@ -208,27 +177,60 @@ def divide_training_data(documents, num_chunks=10):
         t = 0
 
         for _chunk in np.array_split(np.asarray(text.split()), num_chunks): 
-            divided_documents.append(_chunk)
+            divided_documents.append(' '.join(_chunk))
             document_ids.append(doc_id)
             times.append(t)
-            t += 1
+            t += 10
         
     return divided_documents, document_ids, times
 
 
 def infer_topics(mallet_path,
-                 original_training_data_path,
-                 model_path,
-                 output_directory_path):
+                 original_formatted_training_data_path,
+                 original_model_path,
+                 new_training_data_path,
+                 new_formatted_training_data_path,
+                 new_topic_distributions_path,
+                 new_training_data):
+
+    new_training_data_file = open(new_training_data_path, 'w')
+    for i, d in enumerate(new_training_data):
+        new_training_data_file.write(str(i) + ' ' + str(i) + ' ' + d + '\n')
 
     print('Importing data...')
-    os.system(mallet_path + ' import-file --input ' + new_training_data_path 
-                                      + ' --output ' + formatted_training_data_path \
+    os.system(mallet_path + ' import-file --input "' + new_training_data_path + '"'
+                                      + ' --output "' + new_formatted_training_data_path + '"' \
                                       + ' --keep-sequence' \
-                                      + ' --use-pipe-from' + original_training_data_path)
+                                      + ' --use-pipe-from "' + original_formatted_training_data_path + '"')
 
     print('Inferring topics using pre-trained model...')
-    os.system(mallet_path + ' infer-topics --input ' + formatted_training_data_path \
+    os.system(mallet_path + ' infer-topics --input "' + new_formatted_training_data_path + '"' \
                                        + ' --num-iterations 100' \
-                                       + ' --inferencer ' + model_path \
-                                       + ' --output-doc-topics ' + topic_distributions_path)
+                                       + ' --inferencer "' + original_model_path + '"' \
+                                       + ' --output-doc-topics "' + new_topic_distributions_path + '"')
+
+
+def plot_topics_over_time(topic_distributions, topics, times, topic_index, output_path=None):
+    
+    data_dicts = []
+    for j, _distribution in enumerate(topic_distributions):        
+        for _topic, _probability in enumerate(_distribution):
+            if _topic == topic_index:
+                data_dicts.append({'Probability': _probability,
+                                   'Time': times[j]})
+    data_df = pd.DataFrame(data_dicts)
+
+    sns.set(style='ticks', font_scale=1.2)
+    plt.figure(figsize=(7,2.5))
+    sns.lineplot(data=data_df, 
+                 x='Time', 
+                 y='Probability', 
+                 color='cornflowerblue') 
+    plt.xlabel('Time')
+    plt.ylabel('Topic Probability')
+    plt.title(' '.join(topics[topic_index][:5]))
+    plt.tight_layout()
+    sns.despine()
+    if output_path:
+        plt.savefig(output_path)
+    plt.show()
