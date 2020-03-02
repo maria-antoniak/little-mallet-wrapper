@@ -1,0 +1,20 @@
+Metadata-Version: 2.1
+Name: little-mallet-wrapper
+Version: 0.0.1
+Summary: A little wrapper for the topic modeling functions of MALLET
+Home-page: https://github.com/maria-antoniak/little-mallet-wrapper
+Author: Maria Antoniak
+Author-email: maa343@cornell.edu
+License: UNKNOWN
+Description: # little-mallet-wrapper
+        
+        This is a little Python wrapper around the topic modeling functions of [MALLET](http://mallet.cs.umass.edu/topics.php).
+        
+        Currently under construction; please send feedback/requests to Maria Antoniak.
+        
+Platform: UNKNOWN
+Classifier: Programming Language :: Python :: 3
+Classifier: License :: OSI Approved :: GNU General Public License v3 (GPLv3)
+Classifier: Operating System :: OS Independent
+Requires-Python: >=3.6
+Description-Content-Type: text/markdown

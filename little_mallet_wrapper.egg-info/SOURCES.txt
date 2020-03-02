@@ -1,0 +1,6 @@
+README.md
+setup.py
+little_mallet_wrapper.egg-info/PKG-INFO
+little_mallet_wrapper.egg-info/SOURCES.txt
+little_mallet_wrapper.egg-info/dependency_links.txt
+little_mallet_wrapper.egg-info/top_level.txt

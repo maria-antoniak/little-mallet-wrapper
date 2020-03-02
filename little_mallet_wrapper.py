@@ -1,18 +1,12 @@
-import dill
 import os
-from datetime import datetime
-import json
-import pandas as pd
-import pickle
-import random
 import re
+
+import numpy as np
+import pandas as pd
 
 import matplotlib.pyplot as plt
 import seaborn as sns
 sns.set(style='ticks', font_scale=1.2)
-
-import gensim
-import numpy as np
 
 
 STOPS = ['i', 'me', 'my', 'myself', 'we', 'our', 'ours', 'ourselves', 'you', 'your', 'yours',
@@ -94,7 +88,7 @@ def load_topic_distributions(topic_distributions_path):
     return topic_distributions
 
 
-def get_top_docs(training_data, topic_distributions, topic, n=5):
+# def get_top_docs(training_data, topic_distributions, topic, n=5):
 
 
 
