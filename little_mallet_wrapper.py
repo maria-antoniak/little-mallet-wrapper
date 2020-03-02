@@ -94,6 +94,11 @@ def load_topic_distributions(topic_distributions_path):
     return topic_distributions
 
 
+def get_top_docs(training_data, topic_distributions, topic, n=5):
+
+
+
+
 def plot_categories_by_topics_heatmap(labels, 
                                       distributions, 
                                       topics, 
