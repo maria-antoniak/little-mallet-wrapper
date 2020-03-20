@@ -4,8 +4,8 @@ with open("README.md", "r") as fh:
     long_description = fh.read()
 
 setuptools.setup(
-    name="little_mallet_wrapper",
-    version="0.0.1",
+    name="little-mallet-wrapper",
+    version="0.0.2",
     author="Maria Antoniak",
     author_email="maa343@cornell.edu",
     description="A little wrapper for the topic modeling functions of MALLET",
@@ -19,5 +19,5 @@ setuptools.setup(
         "Operating System :: OS Independent",
     ],
     python_requires='>=3.6',
-    scripts=['little_mallet_wrapper']
+    # scripts=['little_mallet_wrapper']
 )
