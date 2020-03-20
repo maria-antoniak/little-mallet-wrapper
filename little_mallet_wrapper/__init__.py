@@ -1,4 +1,4 @@
-from little_mallet_wrapper import (
+from .little_mallet_wrapper import (
   process_string,
   train_topic_model,
   load_topic_keys,
