@@ -4,7 +4,7 @@ with open("README.md", "r") as fh:
     long_description = fh.read()
 
 setuptools.setup(
-    name="little-mallet-wrapper",
+    name="little_mallet_wrapper",
     version="0.0.1",
     author="Maria Antoniak",
     author_email="maa343@cornell.edu",
