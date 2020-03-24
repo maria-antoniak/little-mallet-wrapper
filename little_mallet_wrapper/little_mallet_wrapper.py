@@ -31,6 +31,10 @@ def remove_non_alpha(text):
     text = re.sub('[0-9]+', 'NUM', text)
     return re.sub('[^A-Za-z\s]', ' ', text)
 
+def remove_numbers(text):
+    text = re.sub('[0-9]+', '', text)
+    return re.sub('[^A-Za-z\s]', ' ', text)
+
 
 def remove_stop_words(text):
     return ' '.join([word for word in text.split() if word not in STOPS])
@@ -40,9 +44,12 @@ def remove_short_words(text, min_length):
     return ' '.join([word for word in text.split() if not len(word) < min_length])
 
 
-def process_string(text):
+def process_string(text, remove_numbers=False):
     text = text.lower()
-    text = remove_non_alpha(text)
+    if remove_numbers == True:
+         text = remove_numbers(text)
+    else:
+         text = remove_non_alpha(text)
     text = remove_stop_words(text)
     text = remove_short_words(text, 2)
     text = remove_extra_spaces(text)
