@@ -23,56 +23,79 @@ STOPS = ['i', 'me', 'my', 'myself', 'we', 'our', 'ours', 'ourselves', 'you', 'yo
          'than', 'too', 'very', 's', 't', 'can', 'will', 'just', 'don', 'should', 'now', 've', 'll', 'amp']
 
 
-def remove_extra_spaces(text):
-    return ' '.join(text.split())
+
+def print_dataset_stats(training_data):
+
+    num_documents = len(training_data)
+    mean_num_words = np.mean([len(d.split()) for d in training_data])
+    vocab_size = len(list(set([w for d in training_data for w in d.split()])))
+
+    print('Number of Documents:', num_documents)
+    print('Mean Number of Words:', round(mean_num_words, 1))
+    print('Vocabulary Size:', vocab_size)
 
 
-def remove_non_alpha(text):
-    text = re.sub('[0-9]+', 'NUM', text)
-    return re.sub('[^A-Za-z\s]', ' ', text)
-
-
-def remove_stop_words(text):
-    return ' '.join([word for word in text.split() if word not in STOPS])
-
-
-def remove_short_words(text, min_length):
-    return ' '.join([word for word in text.split() if not len(word) < min_length])
-
-
-def process_string(text):
-    text = text.lower()
-    text = remove_non_alpha(text)
-    text = remove_stop_words(text)
-    text = remove_short_words(text, 2)
-    text = remove_extra_spaces(text)
+def process_string(text, 
+                   lowercase=True, 
+                   remove_short_words=True, 
+                   remove_stop_words=True, 
+                   remove_punctuation=True, 
+                   numbers='replace', 
+                   stop_words=STOPS):
+    if lowercase:
+        text = text.lower()
+    if numbers == 'replace':
+        text = re.sub('[0-9]+', 'NUM', text)
+    elif numbers == 'remove':
+        text = re.sub('[0-9]+', ' ', text)
+    if remove_punctuation:
+        text = re.sub('[^A-Za-z\s]', ' ', text)
+    if remove_stop_words:
+        text = ' '.join([word for word in text.split() if word not in stop_words])
+    if remove_short_words:
+        text = ' '.join([word for word in text.split() if not len(word) < 2])
+    text = ' '.join(text.split())
     return text
 
 
-def train_topic_model(mallet_path,
-                      training_data_path,
-                      formatted_training_data_path,
-                      model_path,
-                      topic_keys_path,
-                      topic_distributions_path,
-                      training_data,
-                      num_topics):
+def import_data(path_to_mallet,
+                path_to_training_data,
+                path_to_formatted_training_data,
+                training_data,
+                use_pipe_from=None):
 
-    training_data_file = open(training_data_path, 'w')
+    training_data_file = open(path_to_training_data, 'w')
     for i, d in enumerate(training_data):
         training_data_file.write(str(i) + ' ' + str(i) + ' ' + d + '\n')
 
-    print('Importing data...')
-    os.system(mallet_path + ' import-file --input "' + training_data_path + '"' 
-                                      + ' --output "' + formatted_training_data_path + '"' \
-                                      + ' --keep-sequence')
+    if use_pipe_from:
+        print('Importing data using pipe...')
+        os.system(path_to_mallet + ' import-file --input "' + path_to_training_data + '"' 
+                                            + ' --output "' + path_to_formatted_training_data + '"' \
+                                            + ' --keep-sequence' \
+                                            + ' --use-pipe-from "' + use_pipe_from + '"')
+    else:
+        print('Importing data...')
+        os.system(path_to_mallet + ' import-file --input "' + path_to_training_data + '"' 
+                                            + ' --output "' + path_to_formatted_training_data + '"' \
+                                            + ' --keep-sequence')
+    print('Complete')
+
+
+def train_topic_model(path_to_mallet,
+                      path_to_formatted_training_data,
+                      path_to_model,
+                      path_to_topic_key,
+                      path_to_topic_distributions,
+                      num_topics):
 
     print('Training topic model...')
-    os.system(mallet_path + ' train-topics --input "' + formatted_training_data_path + '"' \
-                                       + ' --num-topics ' + str(num_topics) \
-                                       + ' --inferencer-filename "' + model_path + '"' \
-                                       + ' --output-topic-keys "' + topic_keys_path + '"' \
-                                       + ' --output-doc-topics "' + topic_distributions_path + '"')
+    os.system(path_to_mallet + ' train-topics --input "' + path_to_formatted_training_data + '"' \
+                                          + ' --num-topics ' + str(num_topics) \
+                                          + ' --inferencer-filename "' + path_to_model + '"' \
+                                          + ' --output-topic-keys "' + path_to_topic_key + '"' \
+                                          + ' --output-doc-topics "' + path_to_topic_distributions + '"')
+    print('Complete')
 
 
 def load_topic_keys(topic_keys_path):
@@ -88,9 +111,11 @@ def load_topic_distributions(topic_distributions_path):
     return topic_distributions
 
 
-# def get_top_docs(training_data, topic_distributions, topic, n=5):
-
-
+def get_top_docs(training_data, topic_distributions, topic, n=5):
+    sorted_data = sorted([(_distribution[topic], _document) 
+                          for _distribution, _document 
+                          in zip(topic_distributions, training_data)], reverse=True)
+    return sorted_data[:n]
 
 
 def plot_categories_by_topics_heatmap(labels, 
@@ -179,34 +204,22 @@ def divide_training_data(documents, num_chunks=10):
             divided_documents.append(' '.join(_chunk))
             document_ids.append(doc_id)
             times.append(t)
-            t += 10
+            t += 0.1
         
     return divided_documents, document_ids, times
 
 
-def infer_topics(mallet_path,
-                 original_formatted_training_data_path,
-                 original_model_path,
-                 new_training_data_path,
-                 new_formatted_training_data_path,
-                 new_topic_distributions_path,
-                 new_training_data):
-
-    new_training_data_file = open(new_training_data_path, 'w')
-    for i, d in enumerate(new_training_data):
-        new_training_data_file.write(str(i) + ' ' + str(i) + ' ' + d + '\n')
-
-    print('Importing data...')
-    os.system(mallet_path + ' import-file --input "' + new_training_data_path + '"'
-                                      + ' --output "' + new_formatted_training_data_path + '"' \
-                                      + ' --keep-sequence' \
-                                      + ' --use-pipe-from "' + original_formatted_training_data_path + '"')
+def infer_topics(path_to_mallet,
+                 path_to_original_model,
+                 path_to_new_formatted_training_data,
+                 path_to_new_topic_distributions):
 
     print('Inferring topics using pre-trained model...')
-    os.system(mallet_path + ' infer-topics --input "' + new_formatted_training_data_path + '"' \
-                                       + ' --num-iterations 100' \
-                                       + ' --inferencer "' + original_model_path + '"' \
-                                       + ' --output-doc-topics "' + new_topic_distributions_path + '"')
+    os.system(path_to_mallet + ' infer-topics --input "' + path_to_new_formatted_training_data + '"' \
+                                          + ' --num-iterations 100' \
+                                          + ' --inferencer "' + path_to_original_model + '"' \
+                                          + ' --output-doc-topics "' + path_to_new_topic_distributions + '"')
+    print('Complete')
 
 
 def plot_topics_over_time(topic_distributions, topics, times, topic_index, output_path=None):
