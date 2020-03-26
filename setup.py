@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="little-mallet-wrapper",
-    version="0.0.5",
+    version="0.0.6",
     author="Maria Antoniak",
     author_email="maa343@cornell.edu",
     description="A little wrapper for the topic modeling functions of MALLET",
