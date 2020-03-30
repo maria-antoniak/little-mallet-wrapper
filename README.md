@@ -11,6 +11,8 @@ See demo.ipynb for a demonstration of how to use the functions in little-mallet-
 
 ### print_dataset_stats(*training_data*)
 
+Displays basic statistics about the training dataset.
+
 | Name               | Type              | Description                      |
 | ------------------ | ----------------- | -------------------------------- |
 | training_data      | list of strings   | Documents that will be used to train the topic model. |
@@ -18,6 +20,8 @@ See demo.ipynb for a demonstration of how to use the functions in little-mallet-
 <br>
 
 ### process_string(*text, lowercase=True, remove_short_words=True, remove_stop_words=True, remove_punctuation=True, numbers='replace', stop_words=STOPS*)
+
+A simple string processor that prepares raw text for topic modeling.
 
 | Name               | Type              | Description                      |
 | ------------------ | ----------------- | -------------------------------- |
@@ -28,11 +32,13 @@ See demo.ipynb for a demonstration of how to use the functions in little-mallet-
 | remove_punctuation | boolean | Whether or not to remove punctuation (not A-Za-z0-9) |
 | remove_numbers | string | 'replace' replaces all numbers with the normalized token NUM; 'remove' removes all numbers. |
 | stop_words | list of strings | Custom list of words to remove. |
-| **RETURNS** | string | Processed version of the input text. |
+| RETURNS | string | Processed version of the input text. |
 
 <br>
 
 ### import_data(*path_to_mallet, path_to_training_data, path_to_formatted_training_data, training_data, use_pipe_from=None*)
+
+Imports the training data into MALLET formatted data that can be used for training.
 
 | Name               | Type              | Description                      |
 | ------------------ | ----------------- | -------------------------------- |
@@ -45,6 +51,8 @@ See demo.ipynb for a demonstration of how to use the functions in little-mallet-
 <br>
 
 ### train_topic_model(*path_to_mallet, path_to_formatted_training_data, path_to_model, path_to_topic_key, path_to_topic_distributions, num_topics*)
+
+Trains an LDA topic model using MALLET.
 
 | Name               | Type              | Description                      |
 | ------------------ | ----------------- | -------------------------------- |
@@ -59,6 +67,8 @@ num_topics | integer | The number of topics to use for training. |
 
 ### load_topic_keys(*topic_keys_path*)
 
+Loads the most sets of most probable words for each topic after training a topic model.
+
 | Name               | Type              | Description                      |
 | ------------------ | ----------------- | -------------------------------- |
 | topic_keys_path | string | Path to where the topic keys are stored. |
@@ -68,6 +78,8 @@ num_topics | integer | The number of topics to use for training. |
 
 ### load_topic_distributions(*topic_distributions_path*)
 
+Loads the topic distribution for each document after training a topic model.
+
 | Name               | Type              | Description                      |
 | ------------------ | ----------------- | -------------------------------- |
 | topic_distributions_path | string | Path to where the topic distributions are stored. |
@@ -76,6 +88,8 @@ num_topics | integer | The number of topics to use for training. |
 <br>
 
 ### get_top_docs(*training_data, topic_distributions, topic_index, n=5*)
+
+Gets the documents with the highest probability for the target topic.
 
 | Name               | Type              | Description                      |
 | ------------------ | ----------------- | -------------------------------- |
@@ -88,6 +102,8 @@ num_topics | integer | The number of topics to use for training. |
 <br>
 
 ### plot_categories_by_topics_heatmap(*labels, topic_distributions, topic_keys, output_path=None, target_labels=None, dim=None*)
+
+If the dataset includes some time of categorical labels, creates a heatmap of the labels x topics.
  
 | Name               | Type              | Description                      |
 | ------------------ | ----------------- | -------------------------------- |
@@ -102,6 +118,8 @@ num_topics | integer | The number of topics to use for training. |
 
 ### plot_categories_by_topic_boxplots(*labels, topic_distributions, topic_keys, output_path=None, target_labels=None, dim=None*)
 
+If the dataset includes some time of categorical labels, creates a set of boxplots, one plot for each topic.
+
 | Name               | Type              | Description                      |
 | ------------------ | ----------------- | -------------------------------- |
 | labels | list of strings | Document labels (e.g., authors of the documents, genres of the documents). |
@@ -115,6 +133,8 @@ num_topics | integer | The number of topics to use for training. |
 
 ### divide_training_data(*documents, num_chunks=10*)
 
+Given a dataset, divides each document into a set of equally sized chunks.
+
 | Name               | Type              | Description                      |
 | ------------------ | ----------------- | -------------------------------- |
 | documents | list of strings | Documents to split. |
@@ -124,6 +144,8 @@ num_topics | integer | The number of topics to use for training. |
 <br>
 
 ### infer_topics(*path_to_mallet, path_to_original_model, path_to_new_formatted_training_data, path_to_new_topic_distributions*)
+
+Get topic distributions for a set of new documents using a model that has been trained on another set of documents.
 
 | Name               | Type              | Description                      |
 | ------------------ | ----------------- | -------------------------------- |
@@ -135,6 +157,8 @@ num_topics | integer | The number of topics to use for training. |
 <br>
 
 ### plot_topics_over_time(*topic_distributions, topic_keys, times, topic_index, output_path=None*)
+
+Creates lineplots, one for each topic, showing the mean topic probability over document segments.
 
 | Name               | Type              | Description                      |
 | ------------------ | ----------------- | -------------------------------- |
