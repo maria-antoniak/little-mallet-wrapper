@@ -111,28 +111,28 @@ def load_topic_distributions(topic_distributions_path):
     return topic_distributions
 
 
-def get_top_docs(training_data, topic_distributions, topic, n=5):
-    sorted_data = sorted([(_distribution[topic], _document) 
+def get_top_docs(training_data, topic_distributions, topic_index, n=5):
+    sorted_data = sorted([(_distribution[topic_index], _document) 
                           for _distribution, _document 
                           in zip(topic_distributions, training_data)], reverse=True)
     return sorted_data[:n]
 
 
 def plot_categories_by_topics_heatmap(labels, 
-                                      distributions, 
-                                      topics, 
+                                      topic_distributions, 
+                                      topic_keys, 
                                       output_path=None,
                                       target_labels=None,
                                       dim=None):
     
     # Combine the labels and distributions into a list of dictionaries.
     dicts_to_plot = []
-    for _label, _distribution in zip(labels, distributions):
+    for _label, _distribution in zip(labels, topic_distributions):
         if not target_labels or _label in target_labels:
             for _topic_index, _probability in enumerate(_distribution):
                 dicts_to_plot.append({'Probability': float(_probability),
                                       'Category': _label,
-                                      'Topic': ' '.join(topics[_topic_index][:5])})
+                                      'Topic': ' '.join(topic_keys[_topic_index][:5])})
 
     # Create a dataframe, format it for the heatmap function, and normalize the columns.
     df_to_plot = pd.DataFrame(dicts_to_plot)
@@ -154,8 +154,8 @@ def plot_categories_by_topics_heatmap(labels,
     
 
 def plot_categories_by_topic_boxplots(labels, 
-                                      distributions, 
-                                      topics, 
+                                      topic_distributions, 
+                                      topic_keys, 
                                       target_topic_index,
                                       output_path=None,
                                       target_labels=None,
@@ -166,11 +166,11 @@ def plot_categories_by_topic_boxplots(labels,
                    
     # Combine the labels and distributions into a dataframe.
     dicts_to_plot = []
-    for _label, _distribution in zip(labels, distributions):
+    for _label, _distribution in zip(labels, topic_distributions):
         if not target_labels or _label in target_labels:
             dicts_to_plot.append({'Probability': float(_distribution[target_topic_index]),
                                   'Category': _label,
-                                  'Topic': ' '.join(topics[target_topic_index][:5])})
+                                  'Topic': ' '.join(topic_keys[target_topic_index][:5])})
     df_to_plot = pd.DataFrame(dicts_to_plot)
 
     # Show the final plot.
@@ -222,7 +222,7 @@ def infer_topics(path_to_mallet,
     print('Complete')
 
 
-def plot_topics_over_time(topic_distributions, topics, times, topic_index, output_path=None):
+def plot_topics_over_time(topic_distributions, topic_keys, times, topic_index, output_path=None):
     
     data_dicts = []
     for j, _distribution in enumerate(topic_distributions):        
@@ -240,7 +240,7 @@ def plot_topics_over_time(topic_distributions, topics, times, topic_index, outpu
                  color='cornflowerblue') 
     plt.xlabel('Time')
     plt.ylabel('Topic Probability')
-    plt.title(' '.join(topics[topic_index][:5]))
+    plt.title(' '.join(topic_keys[topic_index][:5]))
     plt.tight_layout()
     sns.despine()
     if output_path:
