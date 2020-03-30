@@ -9,7 +9,7 @@ See demo.ipynb for a demonstration of how to use the functions in little-mallet-
 
 ## Documentation
 
-### `print_dataset_stats(*training_data*)`
+### `print_dataset_stats(training_data)`
 
 Displays basic statistics about the training dataset.
 
@@ -19,19 +19,19 @@ Displays basic statistics about the training dataset.
 
 <br>
 
-### process_string(*text, lowercase=True, remove_short_words=True, remove_stop_words=True, remove_punctuation=True, numbers='replace', stop_words=STOPS*)
+### `process_string(text, lowercase=True, remove_short_words=True, remove_stop_words=True, remove_punctuation=True, numbers='replace', stop_words=STOPS)`
 
 A simple string processor that prepares raw text for topic modeling.
 
 | Name               | Type              | Description                      |
 | ------------------ | ----------------- | -------------------------------- |
-| text      | string   | Individual document to process. |
-| lowercase | boolean  | Whether or not to lowercase the text. |
-| remove_short_words | boolean | Whether or not to remove words with fewer than 2 characters. |
-| remove_stop_words | boolean | Whether or not to remove stopwords. |
-| remove_punctuation | boolean | Whether or not to remove punctuation (not A-Za-z0-9) |
-| remove_numbers | string | 'replace' replaces all numbers with the normalized token NUM; 'remove' removes all numbers. |
-| stop_words | list of strings | Custom list of words to remove. |
+| `text`      | string   | Individual document to process. |
+| `lowercase` | boolean  | Whether or not to lowercase the text. |
+| `remove_short_words` | boolean | Whether or not to remove words with fewer than 2 characters. |
+| `remove_stop_words` | boolean | Whether or not to remove stopwords. |
+| `remove_punctuation` | boolean | Whether or not to remove punctuation (not A-Za-z0-9) |
+| `remove_numbers` | string | 'replace' replaces all numbers with the normalized token NUM; 'remove' removes all numbers. |
+| `stop_words` | list of strings | Custom list of words to remove. |
 | RETURNS | string | Processed version of the input text. |
 
 <br>
