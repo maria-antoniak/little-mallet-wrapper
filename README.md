@@ -9,13 +9,13 @@ See demo.ipynb for a demonstration of how to use the functions in little-mallet-
 
 ## Documentation
 
-### print_dataset_stats(*training_data*)
+### `print_dataset_stats(*training_data*)`
 
 Displays basic statistics about the training dataset.
 
 | Name               | Type              | Description                      |
 | ------------------ | ----------------- | -------------------------------- |
-| training_data      | list of strings   | Documents that will be used to train the topic model. |
+| `training_data`      | list of strings   | Documents that will be used to train the topic model. |
 
 <br>
 
