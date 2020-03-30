@@ -119,7 +119,7 @@ num_topics | integer | The number of topics to use for training. |
 | ------------------ | ----------------- | -------------------------------- |
 | documents | list of strings | Documents to split. |
 | num_chunks | integer | How many times to split each document. |
-| RETURNS | tuple (list of strings, list of integers, list of integers) | The divided documents, the indices of the input documents, and the division indices within the document. |
+| RETURNS | tuple (list of strings, list of integers, list of floats) | The divided documents, the indices of the input documents, and the positions within the documents (0-1.0). |
 
 <br>
 
@@ -134,6 +134,14 @@ num_topics | integer | The number of topics to use for training. |
                  
 <br>
 
-### plot_topics_over_time
+### plot_topics_over_time(*topic_distributions, topics, times, topic_index, output_path=None*)
+
+| Name               | Type              | Description                      |
+| ------------------ | ----------------- | -------------------------------- |
+| topic_distributions | list of lists of integers | Topic distribution (list of probabilities) for each document. |
+| topics | list of lists of strings | The 20 most probable words for each topic. |
+| times | list of floats | The division indices within the document. |
+| topic_index | integer | The index of the target topic. |
+| output_path | string | Path to where the resulting figure should be saved. |
 
 <br>
