@@ -28,7 +28,7 @@ See demo.ipynb for a demonstration of how to use the functions in little-mallet-
 | remove_punctuation | boolean | Whether or not to remove punctuation (not A-Za-z0-9) |
 | remove_numbers | string | 'replace' replaces all numbers with the normalized token NUM; 'remove' removes all numbers. |
 | stop_words | list of strings | Custom list of words to remove. |
-| RETURNS | string | Processed version of the input text. |
+| **RETURNS** | string | Processed version of the input text. |
 
 <br>
 
