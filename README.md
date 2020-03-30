@@ -55,18 +55,41 @@ path_to_topic_key | string | Path to where the topic keys should be stored. |
 path_to_topic_distributions | string | Path to where the topic distributions should be stored. |
 num_topics | integer | The number of topics to use for training. |
 
-### load_topic_keys
+<br> 
+
+### load_topic_keys(*topic_keys_path*)
+
+| Name               | Type              | Description                      |
+| ------------------ | ----------------- | -------------------------------- |
+| topic_keys_path | string | Path to where the topic keys are stored. |
+| RETURNS | list of lists of strings | The 20 most probable words for each topic. |
+
+<br>
 
 ### load_topic_distributions
 
+<br>
+
 ### get_top_docs
+
+<br>
 
 ### plot_categories_by_topics_heatmap
 
+<br>
+
 ### plot_categories_by_topic_boxplots
+
+<br>
 
 ### divide_training_data
 
+<br>
+
 ### infer_topics
 
+<br>
+
 ### plot_topics_over_time
+
+<br>
