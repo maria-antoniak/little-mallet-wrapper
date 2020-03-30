@@ -36,17 +36,17 @@ A simple string processor that prepares raw text for topic modeling.
 
 <br>
 
-### import_data(*path_to_mallet, path_to_training_data, path_to_formatted_training_data, training_data, use_pipe_from=None*)
+### `import_data(path_to_mallet, path_to_training_data, path_to_formatted_training_data, training_data, use_pipe_from=None)`
 
 Imports the training data into MALLET formatted data that can be used for training.
 
 | Name               | Type              | Description                      |
 | ------------------ | ----------------- | -------------------------------- |
-| path_to_mallet | string | Path to your local MALLET installation: .../mallet-2.0.8/bin/mallet |
-| path_to_training_data | string | Path to where the training data should be stored. |
-| path_to_formatted_training_data | string | Path to where the MALLET formatted training data should be stored. |
-| training_data | list of strings | Processed documents for training the topic model. |
-| use_pipe_from | string | If you want to import the documents using the same model as a previous set of documents, include the path to the previous MALLET formatted training data. |
+| `path_to_mallet` | string | Path to your local MALLET installation: .../mallet-2.0.8/bin/mallet |
+| `path_to_training_data` | string | Path to where the training data should be stored. |
+| `path_to_formatted_training_data` | string | Path to where the MALLET formatted training data should be stored. |
+| `training_data` | list of strings | Processed documents for training the topic model. |
+| `use_pipe_from` | string | If you want to import the documents using the same model as a previous set of documents, include the path to the previous MALLET formatted training data. |
 
 <br>
 
