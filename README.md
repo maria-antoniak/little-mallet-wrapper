@@ -87,7 +87,16 @@ num_topics | integer | The number of topics to use for training. |
 
 <br>
 
-### plot_categories_by_topics_heatmap
+### plot_categories_by_topics_heatmap(*labels, distributions, topics, output_path=None, target_labels=None, dim=None*)
+ 
+| Name               | Type              | Description                      |
+| ------------------ | ----------------- | -------------------------------- |
+| labels | list of strings | Document labels (e.g., authors of the documents, genres of the documents). |
+| distributions | list of lists of integers | Topic distribution (list of probabilities) for each document. |
+| topics | list of lists of strings | The 20 most probable words for each topic. |
+| output_path | string | Path to where the resulting figure should be saved. |
+| target_labels | list of strings | A subset of `labels` to use for plotting. |
+| dim | tuple of integers | (x, y) dimensions for the resulting figure. |
 
 <br>
 
