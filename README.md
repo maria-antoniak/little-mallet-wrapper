@@ -9,7 +9,7 @@ See demo.ipynb for a demonstration of how to use the functions in little-mallet-
 
 ## Documentation
 
-**print_dataset_stats**(*training_data*)
+### print_dataset_stats**(*training_data*)
 
 | Name               | Type              | Description                      |
 | ------------------ | ----------------- | -------------------------------- |
