@@ -23,12 +23,20 @@ See demo.ipynb for a demonstration of how to use the functions in little-mallet-
 | lowercase | boolean  | Whether or not to lowercase the text. |
 | remove_short_words | boolean | Whether or not to remove words with fewer than 2 characters. |
 | remove_stop_words | boolean | Whether or not to remove stopwords. |
-| remove_punctuation | boolean | Whehter or not to remove punctuation (not A-Za-z0-9) |
+| remove_punctuation | boolean | Whether or not to remove punctuation (not A-Za-z0-9) |
 | remove_numbers | string | 'replace' replaces all numbers with the normalized token NUM; 'remove' removes all numbers. |
 | stop_words | list of strings | Custom list of words to remove. |
 | RETURNS | string | Processed version of the input text. |
 
-### import_data
+### import_data(path_to_mallet, path_to_training_data, path_to_formatted_training_data, training_data, use_pipe_from=None)
+
+| Name               | Type              | Description                      |
+| ------------------ | ----------------- | -------------------------------- |
+| path_to_mallet | string | Path to your local MALLET installation: .../mallet-2.0.8/bin/mallet |
+| path_to_training_data | string | Path to where the training data should be stored. |
+| path_to_formatted_training_data | string | Path to where the MALLET formatted training data should be stored. |
+| training_data | list of strings | Processed documents for training the topic model. |
+| use_pipe_from | string | If you want to import the documents using the same model as a previous set of documents, include the path to the previous MALLET formatted training data. |
 
 ### train_topic_model
 
