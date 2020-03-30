@@ -66,11 +66,24 @@ num_topics | integer | The number of topics to use for training. |
 
 <br>
 
-### load_topic_distributions
+### load_topic_distributions(*topic_distributions_path*)
+
+| Name               | Type              | Description                      |
+| ------------------ | ----------------- | -------------------------------- |
+| topic_distributions_path | string | Path to where the topic distributions are stored. |
+| RETURNS | list of lists of integers | Topic distribution (list of probabilities) for each document. |
 
 <br>
 
-### get_top_docs
+### get_top_docs(*training_data, topic_distributions, topic, n=5*)
+
+| Name               | Type              | Description                      |
+| ------------------ | ----------------- | -------------------------------- |
+| training_data | list of strings | Processed documents that was used to train the topic model. |
+| topic_distributions | list of lists of integers | Topic distribution (list of probabilities) for each document. |
+| topic | integer | The index of the target topic. |
+| n | integer | The number of documents to return. |
+| RETURNS | list of tuples (float, string) | The topic probability and document text for the n documents with the highest probability for the target topic. |
 
 <br>
 
