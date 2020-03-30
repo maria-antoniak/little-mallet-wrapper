@@ -100,16 +100,38 @@ num_topics | integer | The number of topics to use for training. |
 
 <br>
 
-### plot_categories_by_topic_boxplots
+### plot_categories_by_topic_boxplots(*labels, distributions, topics, output_path=None, target_labels=None, dim=None*)
+
+| Name               | Type              | Description                      |
+| ------------------ | ----------------- | -------------------------------- |
+| labels | list of strings | Document labels (e.g., authors of the documents, genres of the documents). |
+| distributions | list of lists of integers | Topic distribution (list of probabilities) for each document. |
+| topics | list of lists of strings | The 20 most probable words for each topic. |
+| output_path | string | Path to where the resulting figure should be saved. |
+| target_labels | list of strings | A subset of `labels` to use for plotting. |
+| dim | tuple of integers | (x, y) dimensions for the resulting figure. |
 
 <br>
 
-### divide_training_data
+### divide_training_data(*documents, num_chunks=10*)
+
+| Name               | Type              | Description                      |
+| ------------------ | ----------------- | -------------------------------- |
+| documents | list of strings | Documents to split. |
+| num_chunks | integer | How many times to split each document. |
+| RETURNS | tuple (list of strings, list of integers, list of integers) | The divided documents, the indices of the input documents, and the division indices within the document. |
 
 <br>
 
-### infer_topics
+### infer_topics(*path_to_mallet, path_to_original_model, path_to_new_formatted_training_data, path_to_new_topic_distributions*)
 
+| Name               | Type              | Description                      |
+| ------------------ | ----------------- | -------------------------------- |
+| path_to_mallet | string | Path to your local MALLET installation: .../mallet-2.0.8/bin/mallet |
+| path_to_original_model | string | Path to where the topic model was stored. |
+| path_to_new_formatted_training_data | string | Path to where the MALLET formatted training data is stored. |
+| path_to_new_topic_distributions | string | Path to where the topic distributions should be stored. |
+                 
 <br>
 
 ### plot_topics_over_time
