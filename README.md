@@ -11,7 +11,7 @@ See demo.ipynb for a demonstration of how to use the functions in little-mallet-
 
 ### print_dataset_stats(*training_data*)
 
-Displays basic statistics about the training dataset.
+--> Displays basic statistics about the training dataset.
 
 | Name               | Type              | Description                      |
 | ------------------ | ----------------- | -------------------------------- |
