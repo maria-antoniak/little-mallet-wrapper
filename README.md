@@ -9,13 +9,15 @@ See demo.ipynb for a demonstration of how to use the functions in little-mallet-
 
 ## Documentation
 
-### print_dataset_stats(training_data)
+**print_dataset_stats**(*training_data*)
 
 | Name               | Type              | Description                      |
 | ------------------ | ----------------- | -------------------------------- |
 | training_data      | list of strings   | Documents that will be used to train the topic model. |
 
-### process_string(text, lowercase=True, remove_short_words=True, remove_stop_words=True, remove_punctuation=True, numbers='replace', stop_words=STOPS)
+<br>
+
+**process_string**(*text, lowercase=True, remove_short_words=True, remove_stop_words=True, remove_punctuation=True, numbers='replace', stop_words=STOPS*)
 
 | Name               | Type              | Description                      |
 | ------------------ | ----------------- | -------------------------------- |
@@ -28,7 +30,9 @@ See demo.ipynb for a demonstration of how to use the functions in little-mallet-
 | stop_words | list of strings | Custom list of words to remove. |
 | RETURNS | string | Processed version of the input text. |
 
-### import_data(path_to_mallet, path_to_training_data, path_to_formatted_training_data, training_data, use_pipe_from=None)
+<br>
+
+**import_data**(*path_to_mallet, path_to_training_data, path_to_formatted_training_data, training_data, use_pipe_from=None*)
 
 | Name               | Type              | Description                      |
 | ------------------ | ----------------- | -------------------------------- |
@@ -38,7 +42,7 @@ See demo.ipynb for a demonstration of how to use the functions in little-mallet-
 | training_data | list of strings | Processed documents for training the topic model. |
 | use_pipe_from | string | If you want to import the documents using the same model as a previous set of documents, include the path to the previous MALLET formatted training data. |
 
-### train_topic_model(path_to_mallet, path_to_formatted_training_data, path_to_model, path_to_topic_key, path_to_topic_distributions, num_topics)
+**train_topic_model**(*path_to_mallet, path_to_formatted_training_data, path_to_model, path_to_topic_key, path_to_topic_distributions, num_topics*)
 
 | Name               | Type              | Description                      |
 | ------------------ | ----------------- | -------------------------------- |
