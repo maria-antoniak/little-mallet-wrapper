@@ -75,38 +75,38 @@ num_topics | integer | The number of topics to use for training. |
 
 <br>
 
-### get_top_docs(*training_data, topic_distributions, topic, n=5*)
+### get_top_docs(*training_data, topic_distributions, topic_index, n=5*)
 
 | Name               | Type              | Description                      |
 | ------------------ | ----------------- | -------------------------------- |
 | training_data | list of strings | Processed documents that was used to train the topic model. |
 | topic_distributions | list of lists of integers | Topic distribution (list of probabilities) for each document. |
-| topic | integer | The index of the target topic. |
+| topic_index | integer | The index of the target topic. |
 | n | integer | The number of documents to return. |
 | RETURNS | list of tuples (float, string) | The topic probability and document text for the n documents with the highest probability for the target topic. |
 
 <br>
 
-### plot_categories_by_topics_heatmap(*labels, distributions, topics, output_path=None, target_labels=None, dim=None*)
+### plot_categories_by_topics_heatmap(*labels, topic_distributions, topic_keys, output_path=None, target_labels=None, dim=None*)
  
 | Name               | Type              | Description                      |
 | ------------------ | ----------------- | -------------------------------- |
 | labels | list of strings | Document labels (e.g., authors of the documents, genres of the documents). |
-| distributions | list of lists of integers | Topic distribution (list of probabilities) for each document. |
-| topics | list of lists of strings | The 20 most probable words for each topic. |
+| topic_distributions | list of lists of integers | Topic distribution (list of probabilities) for each document. |
+| topic_keys | list of lists of strings | The 20 most probable words for each topic. |
 | output_path | string | Path to where the resulting figure should be saved. |
 | target_labels | list of strings | A subset of `labels` to use for plotting. |
 | dim | tuple of integers | (x, y) dimensions for the resulting figure. |
 
 <br>
 
-### plot_categories_by_topic_boxplots(*labels, distributions, topics, output_path=None, target_labels=None, dim=None*)
+### plot_categories_by_topic_boxplots(*labels, topic_distributions, topic_keys, output_path=None, target_labels=None, dim=None*)
 
 | Name               | Type              | Description                      |
 | ------------------ | ----------------- | -------------------------------- |
 | labels | list of strings | Document labels (e.g., authors of the documents, genres of the documents). |
-| distributions | list of lists of integers | Topic distribution (list of probabilities) for each document. |
-| topics | list of lists of strings | The 20 most probable words for each topic. |
+| topic_distributions | list of lists of integers | Topic distribution (list of probabilities) for each document. |
+| topic_keys | list of lists of strings | The 20 most probable words for each topic. |
 | output_path | string | Path to where the resulting figure should be saved. |
 | target_labels | list of strings | A subset of `labels` to use for plotting. |
 | dim | tuple of integers | (x, y) dimensions for the resulting figure. |
@@ -134,12 +134,12 @@ num_topics | integer | The number of topics to use for training. |
                  
 <br>
 
-### plot_topics_over_time(*topic_distributions, topics, times, topic_index, output_path=None*)
+### plot_topics_over_time(*topic_distributions, topic_keys, times, topic_index, output_path=None*)
 
 | Name               | Type              | Description                      |
 | ------------------ | ----------------- | -------------------------------- |
 | topic_distributions | list of lists of integers | Topic distribution (list of probabilities) for each document. |
-| topics | list of lists of strings | The 20 most probable words for each topic. |
+| topic_keys | list of lists of strings | The 20 most probable words for each topic. |
 | times | list of floats | The division indices within the document. |
 | topic_index | integer | The index of the target topic. |
 | output_path | string | Path to where the resulting figure should be saved. |
