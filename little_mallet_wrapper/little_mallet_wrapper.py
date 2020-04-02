@@ -53,7 +53,7 @@ def process_string(text,
     if remove_stop_words:
         text = ' '.join([word for word in text.split() if word not in stop_words])
     if remove_short_words:
-        text = ' '.join([word for word in text.split() if not len(word) < 2])
+        text = ' '.join([word for word in text.split() if not len(word) <= 2])
     text = ' '.join(text.split())
     return text
 
@@ -67,25 +67,30 @@ def import_data(path_to_mallet,
     training_data_file = open(path_to_training_data, 'w')
     for i, d in enumerate(training_data):
         training_data_file.write(str(i) + ' ' + str(i) + ' ' + d + '\n')
+    training_data_file.close()
 
     if use_pipe_from:
         print('Importing data using pipe...')
         os.system(path_to_mallet + ' import-file --input "' + path_to_training_data + '"' 
-                                            + ' --output "' + path_to_formatted_training_data + '"' \
-                                            + ' --keep-sequence' \
-                                            + ' --use-pipe-from "' + use_pipe_from + '"')
+                                             + ' --output "' + path_to_formatted_training_data + '"' \
+                                             + ' --keep-sequence' \
+                                             + ' --use-pipe-from "' + use_pipe_from + '"'
+                                             + ' --preserve-case')
     else:
         print('Importing data...')
         os.system(path_to_mallet + ' import-file --input "' + path_to_training_data + '"' 
-                                            + ' --output "' + path_to_formatted_training_data + '"' \
-                                            + ' --keep-sequence')
+                                             + ' --output "' + path_to_formatted_training_data + '"' \
+                                             + ' --keep-sequence'
+                                             + ' --preserve-case')
+                                             # + ' --token-regex "[a-zA-Z0-9]+"'
+
     print('Complete')
 
 
 def train_topic_model(path_to_mallet,
                       path_to_formatted_training_data,
                       path_to_model,
-                      path_to_topic_key,
+                      path_to_topic_keys,
                       path_to_topic_distributions,
                       num_topics):
 
@@ -93,7 +98,7 @@ def train_topic_model(path_to_mallet,
     os.system(path_to_mallet + ' train-topics --input "' + path_to_formatted_training_data + '"' \
                                           + ' --num-topics ' + str(num_topics) \
                                           + ' --inferencer-filename "' + path_to_model + '"' \
-                                          + ' --output-topic-keys "' + path_to_topic_key + '"' \
+                                          + ' --output-topic-keys "' + path_to_topic_keys + '"' \
                                           + ' --output-doc-topics "' + path_to_topic_distributions + '"')
     print('Complete')
 
@@ -105,9 +110,10 @@ def load_topic_keys(topic_keys_path):
 def load_topic_distributions(topic_distributions_path):
     topic_distributions = []
     for line in open(topic_distributions_path, 'r'):
-        distribution = line.split('\t')[2:]
-        distribution = [float(p) for p in distribution]
-        topic_distributions.append(distribution)
+        if line.split()[0] != '#doc':
+            index, distribution = (line.split('\t')[1], line.split('\t')[2:])
+            distribution = [float(p) for p in distribution]
+            topic_distributions.append(distribution)
     return topic_distributions
 
 
