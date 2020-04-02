@@ -183,7 +183,7 @@ def plot_categories_by_topic_boxplots(labels,
                 color='skyblue')  
     sns.despine()
     plt.xticks(rotation=45, ha='right')
-    plt.title('Topic: ' + ' '.join(topics[target_topic_index][:5]))
+    plt.title('Topic: ' + ' '.join(topic_keys[target_topic_index][:5]))
     plt.tight_layout()
     if output_path:
         plt.savefig(output_path)
