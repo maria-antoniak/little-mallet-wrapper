@@ -7,6 +7,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
 sns.set(style='ticks', font_scale=1.2)
+import subprocess
 
 
 STOPS = ['i', 'me', 'my', 'myself', 'we', 'our', 'ours', 'ourselves', 'you', 'your', 'yours',
@@ -63,6 +64,8 @@ def import_data(path_to_mallet,
                 path_to_formatted_training_data,
                 training_data,
                 use_pipe_from=None):
+         
+    path_to_mallet = os.path.expanduser(path_to_mallet)
 
     training_data_file = open(path_to_training_data, 'w')
     for i, d in enumerate(training_data):
@@ -78,13 +81,13 @@ def import_data(path_to_mallet,
                                              + ' --preserve-case')
     else:
         print('Importing data...')
-        os.system(path_to_mallet + ' import-file --input "' + path_to_training_data + '"' 
-                                             + ' --output "' + path_to_formatted_training_data + '"' \
-                                             + ' --keep-sequence'
-                                             + ' --preserve-case')
-                                             # + ' --token-regex "[a-zA-Z0-9]+"'
-
-    print('Complete')
+         import_process = subprocess.run([path_to_mallet, 'import-file', '--input', path_to_training_data, '--output' , path_to_formatted_training_data , '--keep-sequence','--preserve-case'])
+    
+        if import_process.returncode == 1:
+            print("Something went wrong...")
+            print(import_process.stdout)
+        if import_process.returncode == 0:
+            print("Complete!")
 
 
 def train_topic_model(path_to_mallet,
@@ -93,14 +96,21 @@ def train_topic_model(path_to_mallet,
                       path_to_topic_keys,
                       path_to_topic_distributions,
                       num_topics):
+    path_to_mallet = os.path.expanduser(path_to_mallet)   
 
     print('Training topic model...')
-    os.system(path_to_mallet + ' train-topics --input "' + path_to_formatted_training_data + '"' \
-                                          + ' --num-topics ' + str(num_topics) \
-                                          + ' --inferencer-filename "' + path_to_model + '"' \
-                                          + ' --output-topic-keys "' + path_to_topic_keys + '"' \
-                                          + ' --output-doc-topics "' + path_to_topic_distributions + '"')
-    print('Complete')
+    train_process = subprocess.run([path_to_mallet, 'train-topics', '--input',
+                               path_to_formatted_training_data, '--num-topics', str(num_topics),
+                               '--inferencer-filename', path_to_model, '--output-topic-keys',
+                               path_to_topic_keys, '--output-doc-topics', path_to_topic_distributions],
+                              stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True, encoding="utf-8")
+   if train_process.returncode == 1:
+        print("Something went wrong...")
+        print(train_process.stdout)
+    if train_process.returncode == 0:
+        print("Complete!")
+        # Print the Total Time
+        print(train_process.stdout.split("\n")[-2])
 
 
 def load_topic_keys(topic_keys_path):
