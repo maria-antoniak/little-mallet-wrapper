@@ -10,5 +10,6 @@ from .little_mallet_wrapper import (
   plot_categories_by_topic_boxplots,
   divide_training_data,
   infer_topics,
-  plot_topics_over_time
+  plot_topics_over_time,
+  quick_train_topic_model
 )
