@@ -6,6 +6,7 @@ Currently under construction; please send feedback/requests to Maria Antoniak.
 
 See demo.ipynb for a demonstration of how to use the functions in little-mallet-wrapper.
 
+<br>
 
 ## Documentation
 
@@ -33,6 +34,21 @@ A simple string processor that prepares raw text for topic modeling.
 | `remove_numbers` | string | 'replace' replaces all numbers with the normalized token NUM; 'remove' removes all numbers. |
 | `stop_words` | list of strings | Custom list of words to remove. |
 | RETURNS | string | Processed version of the input text. |
+
+<br>
+
+### `quick_train_topic_model(path_to_mallet, output_directory_path, num_topics, training_data)`
+
+Imports training data, trains an LDA topic model using MALLET, and returns the topic keys and document distributions.
+
+| Name               | Type              | Description                      |
+| ------------------ | ----------------- | -------------------------------- |
+| `path_to_mallet` | string | Path to your local MALLET installation: .../mallet-2.0.8/bin/mallet |
+| `output_directory_path` | string | Path to where the output files should be stored. |
+| `num_topics` | integer | The number of topics to use for training. |
+| `training_data` | list of strings | Processed documents for training the topic model. |
+| RETURNS | list of lists of strings | The 20 most probable words for each topic. |
+| RETURNS | list of lists of integers | Topic distribution (list of probabilities) for each document. |
 
 <br>
 

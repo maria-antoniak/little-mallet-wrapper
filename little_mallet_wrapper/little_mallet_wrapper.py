@@ -1,5 +1,6 @@
 import os
 import re
+import subprocess
 
 import numpy as np
 import pandas as pd
@@ -99,18 +100,37 @@ def import_data(path_to_mallet,
 
     if use_pipe_from:
         print('Importing data using pipe...')
-        os.system(path_to_mallet + ' import-file --input "' + path_to_training_data + '"' 
-                                             + ' --output "' + path_to_formatted_training_data + '"' \
-                                             + ' --keep-sequence' \
-                                             + ' --use-pipe-from "' + use_pipe_from + '"'
-                                             + ' --preserve-case')
+        result = subprocess.run([path_to_mallet, 
+                                   'import-file', 
+                                   '--input', 
+                                   path_to_training_data, 
+                                   '--output', 
+                                   path_to_formatted_training_data,
+                                   '--keep-sequence',
+                                   '--use-pipe-from',
+                                   use_pipe_from,
+                                   '--preserve-case'], stderr=subprocess.PIPE, stdout=subprocess.PIPE) #, shell=True)
+        if result.stdout.decode('utf-8') or result.stderr.decode('utf-8'):
+            print('====================================')
+            print(result.stdout.decode('utf-8'))
+            print(result.stderr.decode('utf-8'))
+            print('====================================')
+        
     else:
         print('Importing data...')
-        os.system(path_to_mallet + ' import-file --input "' + path_to_training_data + '"' 
-                                             + ' --output "' + path_to_formatted_training_data + '"' \
-                                             + ' --keep-sequence'
-                                             + ' --preserve-case')
-                                             # + ' --token-regex "[a-zA-Z0-9]+"'
+        result = subprocess.run([path_to_mallet, 
+                                   'import-file', 
+                                   '--input', 
+                                   path_to_training_data, 
+                                   '--output', 
+                                   path_to_formatted_training_data,
+                                   '--keep-sequence',
+                                   '--preserve-case'], stderr=subprocess.PIPE, stdout=subprocess.PIPE) #, shell=True)
+        if result.stdout.decode('utf-8') or result.stderr.decode('utf-8'):
+            print('====================================')
+            print(result.stdout.decode('utf-8'))
+            print(result.stderr.decode('utf-8'))
+            print('====================================')
 
     print('Complete')
 
@@ -123,11 +143,24 @@ def train_topic_model(path_to_mallet,
                       num_topics):
 
     print('Training topic model...')
-    os.system(path_to_mallet + ' train-topics --input "' + path_to_formatted_training_data + '"' \
-                                          + ' --num-topics ' + str(num_topics) \
-                                          + ' --inferencer-filename "' + path_to_model + '"' \
-                                          + ' --output-topic-keys "' + path_to_topic_keys + '"' \
-                                          + ' --output-doc-topics "' + path_to_topic_distributions + '"')
+    result = subprocess.run([path_to_mallet,  
+                              'train-topics',
+                              '--input',
+                              path_to_formatted_training_data,
+                              '--num-topics',
+                              str(num_topics),
+                              '--inferencer-filename',
+                              path_to_model,
+                              '--output-topic-keys',
+                              path_to_topic_keys,
+                              '--output-doc-topics', 
+                              path_to_topic_distributions], stderr=subprocess.PIPE, stdout=subprocess.PIPE) #, shell=True)
+
+    print('====================================')
+    print(result.stdout.decode('utf-8'))
+    print(result.stderr.decode('utf-8'))
+    print('====================================')
+
     print('Complete')
 
 
