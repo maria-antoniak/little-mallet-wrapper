@@ -14,6 +14,22 @@ v0.0.12: Import and training functions now display MALLET output and error messa
 
 <br>
 
+## Installation
+
+`pip install little_mallet_wrapper==0.0.12`
+
+<br>
+
+## Requirements
+
+* Python 3.7+
+* [MALLET](http://mallet.cs.umass.edu/topics.php)
+* pandas
+* numpy
+* [seaborn](https://seaborn.pydata.org/) (for plotting functions)
+
+<br>
+
 ## Documentation
 
 #### `print_dataset_stats(training_data)`
