@@ -4,8 +4,6 @@ This is a little Python wrapper around the topic modeling functions of [MALLET](
 
 Currently under construction; please send feedback/requests to Maria Antoniak.
 
-See demo.ipynb for a demonstration of how to use the functions in little-mallet-wrapper.
-
 <br>
 
 ## Updates
@@ -27,6 +25,12 @@ v0.0.12: Import and training functions now display MALLET output and error messa
 * pandas
 * numpy
 * [seaborn](https://seaborn.pydata.org/) (for plotting functions)
+
+<br>
+
+## Usage 
+
+See demo.ipynb for a demonstration of how to use the functions in little-mallet-wrapper.
 
 <br>
 
