@@ -20,7 +20,7 @@ v0.0.12: Import and training functions now display MALLET output and error messa
 
 ## Requirements
 
-* Python 3.7+
+* Python 3.7
 * [MALLET](http://mallet.cs.umass.edu/topics.php)
 * pandas
 * numpy
