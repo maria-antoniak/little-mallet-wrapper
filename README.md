@@ -8,7 +8,7 @@ Currently under construction; please send feedback/requests to Maria Antoniak.
 
 ## Updates
 
-v0.0.12: Import and training functions now display MALLET output and error messages.
+v0.01.00: Switched from subprocess to os to address Windows errors.
 
 <br>
 
@@ -209,5 +209,17 @@ Creates lineplots, one for each topic, showing the mean topic probability over d
 | `times` | list of floats | The division indices within the document. |
 | `topic_index` | integer | The index of the target topic. |
 | `output_path` | string | Path to where the resulting figure should be saved. |
+
+<br>
+
+#### `get_js_similarity(topic_index_1, topic_index_2, topic_distributions)`
+
+Creates lineplots, one for each topic, showing the mean topic probability over document segments.
+
+| Name               | Type              | Description                      |
+| ------------------ | ----------------- | -------------------------------- |
+| `topic_index_1` | integer | The index of the first target topic. |
+| `topic_index_2` | integer | The index of the second target topic. |
+| `topic_distributions` | list of lists of integers | Topic distribution (list of probabilities) for each document. |
 
 <br>
