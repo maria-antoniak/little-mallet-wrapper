@@ -14,7 +14,7 @@ v0.01.00: Switched from subprocess to os to address Windows errors.
 
 ## Installation
 
-`pip install little_mallet_wrapper==0.0.12`
+`pip install little_mallet_wrapper`
 
 <br>
 
