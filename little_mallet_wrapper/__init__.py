@@ -11,5 +11,6 @@ from .little_mallet_wrapper import (
   divide_training_data,
   infer_topics,
   plot_topics_over_time,
-  quick_train_topic_model
+  quick_train_topic_model,
+  get_js_similarity
 )

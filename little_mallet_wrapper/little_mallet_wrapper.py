@@ -1,9 +1,9 @@
 import os
 import re
-import subprocess
 
 import numpy as np
 import pandas as pd
+from scipy.spatial.distance import jensenshannon
 
 import matplotlib.pyplot as plt
 import seaborn as sns
@@ -32,7 +32,7 @@ def print_dataset_stats(training_data):
     vocab_size = len(list(set([w for d in training_data for w in d.split()])))
 
     print('Number of Documents:', num_documents)
-    print('Mean Number of Words:', round(mean_num_words, 1))
+    print('Mean Number of Words per Document:', round(mean_num_words, 1))
     print('Vocabulary Size:', vocab_size)
 
 
@@ -42,7 +42,8 @@ def process_string(text,
                    remove_stop_words=True, 
                    remove_punctuation=True, 
                    numbers='replace', 
-                   stop_words=STOPS):
+                   stop_words=STOPS,
+                   stop_words_extra=[]):
     if lowercase:
         text = text.lower()
     if numbers == 'replace':
@@ -52,7 +53,7 @@ def process_string(text,
     if remove_punctuation:
         text = re.sub('[^A-Za-z\s]', ' ', text)
     if remove_stop_words:
-        text = ' '.join([word for word in text.split() if word not in stop_words])
+        text = ' '.join([word for word in text.split() if word not in stop_words + stop_words_extra])
     if remove_short_words:
         text = ' '.join([word for word in text.split() if not len(word) <= 2])
     text = ' '.join(text.split())
@@ -100,37 +101,18 @@ def import_data(path_to_mallet,
 
     if use_pipe_from:
         print('Importing data using pipe...')
-        result = subprocess.run([path_to_mallet, 
-                                   'import-file', 
-                                   '--input', 
-                                   path_to_training_data, 
-                                   '--output', 
-                                   path_to_formatted_training_data,
-                                   '--keep-sequence',
-                                   '--use-pipe-from',
-                                   use_pipe_from,
-                                   '--preserve-case'], stderr=subprocess.PIPE, stdout=subprocess.PIPE) #, shell=True)
-        if result.stdout.decode('utf-8') or result.stderr.decode('utf-8'):
-            print('====================================')
-            print(result.stdout.decode('utf-8'))
-            print(result.stderr.decode('utf-8'))
-            print('====================================')
+        os.system(path_to_mallet + ' import-file --input "' + path_to_training_data + '"' 
+                                             + ' --output "' + path_to_formatted_training_data + '"' \
+                                             + ' --keep-sequence' \
+                                             + ' --use-pipe-from "' + use_pipe_from + '"'
+                                             + ' --preserve-case')
         
     else:
         print('Importing data...')
-        result = subprocess.run([path_to_mallet, 
-                                   'import-file', 
-                                   '--input', 
-                                   path_to_training_data, 
-                                   '--output', 
-                                   path_to_formatted_training_data,
-                                   '--keep-sequence',
-                                   '--preserve-case'], stderr=subprocess.PIPE, stdout=subprocess.PIPE) #, shell=True)
-        if result.stdout.decode('utf-8') or result.stderr.decode('utf-8'):
-            print('====================================')
-            print(result.stdout.decode('utf-8'))
-            print(result.stderr.decode('utf-8'))
-            print('====================================')
+        os.system(path_to_mallet + ' import-file --input "' + path_to_training_data + '"' 
+                                             + ' --output "' + path_to_formatted_training_data + '"' \
+                                             + ' --keep-sequence'
+                                             + ' --preserve-case')
 
     print('Complete')
 
@@ -143,23 +125,11 @@ def train_topic_model(path_to_mallet,
                       num_topics):
 
     print('Training topic model...')
-    result = subprocess.run([path_to_mallet,  
-                              'train-topics',
-                              '--input',
-                              path_to_formatted_training_data,
-                              '--num-topics',
-                              str(num_topics),
-                              '--inferencer-filename',
-                              path_to_model,
-                              '--output-topic-keys',
-                              path_to_topic_keys,
-                              '--output-doc-topics', 
-                              path_to_topic_distributions], stderr=subprocess.PIPE, stdout=subprocess.PIPE) #, shell=True)
-
-    print('====================================')
-    print(result.stdout.decode('utf-8'))
-    print(result.stderr.decode('utf-8'))
-    print('====================================')
+    os.system(path_to_mallet + ' train-topics --input "' + path_to_formatted_training_data + '"' \
+                                          + ' --num-topics ' + str(num_topics) \
+                                          + ' --inferencer-filename "' + path_to_model + '"' \
+                                          + ' --output-topic-keys "' + path_to_topic_keys + '"' \
+                                          + ' --output-doc-topics "' + path_to_topic_distributions + '"')
 
     print('Complete')
 
@@ -204,8 +174,8 @@ def plot_categories_by_topics_heatmap(labels,
     # Create a dataframe, format it for the heatmap function, and normalize the columns.
     df_to_plot = pd.DataFrame(dicts_to_plot)
     df_wide = df_to_plot.pivot_table(index='Category', 
-                                  columns='Topic', 
-                                  values='Probability')
+                                     columns='Topic', 
+                                     values='Probability')
     df_norm_col=(df_wide-df_wide.mean())/df_wide.std()
         
     # Show the final plot.
@@ -313,3 +283,7 @@ def plot_topics_over_time(topic_distributions, topic_keys, times, topic_index, o
     if output_path:
         plt.savefig(output_path)
     plt.show()
+
+
+def get_js_similarity(topic_index_1, topic_index_2, topic_distributions):
+    return jensenshannon(topic_distributions[topic_index_1], topic_distributions[topic_index_2])
