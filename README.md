@@ -211,15 +211,3 @@ Creates lineplots, one for each topic, showing the mean topic probability over d
 | `output_path` | string | Path to where the resulting figure should be saved. |
 
 <br>
-
-#### `get_js_similarity(topic_index_1, topic_index_2, topic_distributions)`
-
-Creates lineplots, one for each topic, showing the mean topic probability over document segments.
-
-| Name               | Type              | Description                      |
-| ------------------ | ----------------- | -------------------------------- |
-| `topic_index_1` | integer | The index of the first target topic. |
-| `topic_index_2` | integer | The index of the second target topic. |
-| `topic_distributions` | list of lists of integers | Topic distribution (list of probabilities) for each document. |
-
-<br>
