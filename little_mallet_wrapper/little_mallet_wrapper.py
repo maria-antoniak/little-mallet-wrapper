@@ -169,7 +169,7 @@ def plot_categories_by_topics_heatmap(labels,
             for _topic_index, _probability in enumerate(_distribution):
                 dicts_to_plot.append({'Probability': float(_probability),
                                       'Category': _label,
-                                      'Topic': 'Topic ' + str(_topic_index) + ': ' + ' '.join(topic_keys[_topic_index][:5])})
+                                      'Topic': 'Topic ' + str(_topic_index).zfill(2) + ': ' + ' '.join(topic_keys[_topic_index][:5])})
 
     # Create a dataframe, format it for the heatmap function, and normalize the columns.
     df_to_plot = pd.DataFrame(dicts_to_plot)
@@ -182,8 +182,10 @@ def plot_categories_by_topics_heatmap(labels,
     if dim:
         plt.figure(figsize=dim)
     sns.set(style='ticks', font_scale=1.2)
-    sns.heatmap(df_norm_col, cmap=sns.cm.rocket_r)    
-    plt.xticks(rotation=45, ha='right')
+    ax = sns.heatmap(df_norm_col, cmap=sns.cm.rocket_r)    
+    ax.xaxis.tick_top()
+    ax.xaxis.set_label_position('top')
+    plt.xticks(rotation=30, ha='left')
     plt.tight_layout()
     if output_path:
         plt.savefig(output_path)
