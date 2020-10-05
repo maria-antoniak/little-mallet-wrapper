@@ -176,7 +176,6 @@ def plot_categories_by_topics_heatmap(labels,
     df_wide = df_to_plot.pivot_table(index='Category', 
                                      columns='Topic', 
                                      values='Probability')
-    df_wide = df_wide.reindex(df_to_plot['Topic'].unique(), axis=1) # Sort by topic order
     df_norm_col=(df_wide-df_wide.mean())/df_wide.std()
         
     # Show the final plot.
