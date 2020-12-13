@@ -218,3 +218,16 @@ Creates lineplots, one for each topic, showing the mean topic probability over d
 | `output_path` | string | Path to where the resulting figure should be saved. |
 
 <br>
+
+#### `get_js_divergence(topic_index_1, topic_index_2, topic_distributions)`
+
+Calculates the Jensen-Shannon divergence between the two target topic distributions.
+
+| Name               | Type              | Description                      |
+| ------------------ | ----------------- | -------------------------------- |
+| `topic_index_1` | integer | Index of the first target topic distribution. |
+| `topic_index_2` | integer | Index of the second target topic distribution. |
+| `topic_distributions` | list of lists of integers | Topic distribution (list of probabilities) for each document. |
+| RETURNS | float | Jensen-Shannon divergence of the requested topic distributions. |
+
+<br>
