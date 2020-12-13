@@ -6,11 +6,6 @@ Currently under construction; please send feedback/requests to Maria Antoniak.
 
 <br>
 
-## Updates
-
-v0.01.00: Switched from subprocess to os to address Windows errors.
-
-<br>
 
 ## Installation
 
@@ -48,7 +43,7 @@ Displays basic statistics about the training dataset.
 
 #### `process_string(text, lowercase=True, remove_short_words=True, remove_stop_words=True, remove_punctuation=True, numbers='replace', stop_words=STOPS)`
 
-A simple string processor that prepares raw text for topic modeling.
+A simple string processor that prepares raw text for topic modeling. CAUTION: Depending on your data, you might need to write your own processing function. Do not rely on this function for non-English languages; both the stopword list and the punctuation removal assume English as input.
 
 | Name               | Type              | Description                      |
 | ------------------ | ----------------- | -------------------------------- |
@@ -78,7 +73,7 @@ Imports training data, trains an LDA topic model using MALLET, and returns the t
 
 <br>
 
-#### `import_data(path_to_mallet, path_to_training_data, path_to_formatted_training_data, training_data, use_pipe_from=None)`
+#### `import_data(path_to_mallet, path_to_training_data, path_to_formatted_training_data, training_data, training_ids=None, use_pipe_from=None)`
 
 Imports the training data into MALLET formatted data that can be used for training.
 
@@ -88,6 +83,7 @@ Imports the training data into MALLET formatted data that can be used for traini
 | `path_to_training_data` | string | Path to where the training data should be stored. |
 | `path_to_formatted_training_data` | string | Path to where the MALLET formatted training data should be stored. |
 | `training_data` | list of strings | Processed documents for training the topic model. |
+| `training_ids` | list of strings | Unique identifiers for the training data. |
 | `use_pipe_from` | string | If you want to import the documents using the same model as a previous set of documents, include the path to the previous MALLET formatted training data. |
 
 <br>
@@ -126,6 +122,17 @@ Loads the topic distribution for each document after training a topic model.
 | ------------------ | ----------------- | -------------------------------- |
 | `topic_distributions_path` | string | Path to where the topic distributions are stored. |
 | RETURNS | list of lists of integers | Topic distribution (list of probabilities) for each document. |
+
+<br>
+
+#### `load_training_ids(topic_distributions_path)`
+
+Loads the training IDs. This is either a list of sequential integers or the user-specified training IDs passed to `import_data()`.
+
+| Name               | Type              | Description                      |
+| ------------------ | ----------------- | -------------------------------- |
+| `topic_distributions_path` | string | Path to where the topic distributions are stored. |
+| RETURNS | list of lists of strings | List of training IDs in the same order as the topic distributions. |
 
 <br>
 

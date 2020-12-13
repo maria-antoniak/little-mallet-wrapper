@@ -5,6 +5,7 @@ from .little_mallet_wrapper import (
   train_topic_model,
   load_topic_keys,
   load_topic_distributions,
+  load_training_ids,
   get_top_docs,
   plot_categories_by_topics_heatmap,
   plot_categories_by_topic_boxplots,
@@ -12,5 +13,5 @@ from .little_mallet_wrapper import (
   infer_topics,
   plot_topics_over_time,
   quick_train_topic_model,
-  get_js_similarity
+  get_js_divergence
 )

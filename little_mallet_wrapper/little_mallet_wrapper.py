@@ -51,7 +51,7 @@ def process_string(text,
     elif numbers == 'remove':
         text = re.sub('[0-9]+', ' ', text)
     if remove_punctuation:
-        text = re.sub('[^A-Za-z\s]', ' ', text)
+        text = re.sub(r'[^\sA-Za-z0-9À-ÖØ-öø-ÿЀ-ӿ/]', ' ', text)
     if remove_stop_words:
         text = ' '.join([word for word in text.split() if word not in stop_words + stop_words_extra])
     if remove_short_words:
@@ -92,11 +92,15 @@ def import_data(path_to_mallet,
                 path_to_training_data,
                 path_to_formatted_training_data,
                 training_data,
+                training_ids=None,
                 use_pipe_from=None):
 
     training_data_file = open(path_to_training_data, 'w')
     for i, d in enumerate(training_data):
-        training_data_file.write(str(i) + ' ' + str(i) + ' ' + d + '\n')
+        if training_ids:
+            training_data_file.write(str(training_ids[i]) + ' no_label ' + d + '\n')
+        else:
+            training_data_file.write(str(i) + ' no_label ' + d + '\n')
     training_data_file.close()
 
     if use_pipe_from:
@@ -142,10 +146,19 @@ def load_topic_distributions(topic_distributions_path):
     topic_distributions = []
     for line in open(topic_distributions_path, 'r'):
         if line.split()[0] != '#doc':
-            index, distribution = (line.split('\t')[1], line.split('\t')[2:])
+            instance_id, distribution = (line.split('\t')[1], line.split('\t')[2:])
             distribution = [float(p) for p in distribution]
             topic_distributions.append(distribution)
     return topic_distributions
+
+
+def load_training_ids(topic_distributions_path):
+    training_ids = []
+    for line in open(topic_distributions_path, 'r'):
+        if line.split()[0] != '#doc':
+            instance_id, distribution = (line.split('\t')[1], line.split('\t')[2:])
+            training_ids.append(instance_id)
+    return training_ids
 
 
 def get_top_docs(training_data, topic_distributions, topic_index, n=5):
@@ -287,5 +300,5 @@ def plot_topics_over_time(topic_distributions, topic_keys, times, topic_index, o
     plt.show()
 
 
-def get_js_similarity(topic_index_1, topic_index_2, topic_distributions):
+def get_js_divergence(topic_index_1, topic_index_2, topic_distributions):
     return jensenshannon(topic_distributions[topic_index_1], topic_distributions[topic_index_2])
