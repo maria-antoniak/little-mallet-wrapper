@@ -6,6 +6,7 @@ from .little_mallet_wrapper import (
   load_topic_keys,
   load_topic_distributions,
   load_training_ids,
+  load_topic_word_distributions,
   get_top_docs,
   plot_categories_by_topics_heatmap,
   plot_categories_by_topic_boxplots,

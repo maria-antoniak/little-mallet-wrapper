@@ -1,3 +1,4 @@
+from collections import defaultdict
 import os
 import re
 
@@ -70,6 +71,7 @@ def quick_train_topic_model(path_to_mallet,
     path_to_model                   = output_directory_path + '/mallet.model.' + str(num_topics)
     path_to_topic_keys              = output_directory_path + '/mallet.topic_keys.' + str(num_topics)
     path_to_topic_distributions     = output_directory_path + '/mallet.topic_distributions.' + str(num_topics)
+    path_to_word_weights            = output_directory_path + '/mallet.word_weights.' + str(num_topics)
 
     import_data(path_to_mallet,
                 path_to_training_data,
@@ -80,6 +82,7 @@ def quick_train_topic_model(path_to_mallet,
                       path_to_model,
                       path_to_topic_keys,
                       path_to_topic_distributions,
+                      path_to_word_weights,
                       num_topics)
     
     topic_keys = load_topic_keys(path_to_topic_keys)
@@ -126,6 +129,7 @@ def train_topic_model(path_to_mallet,
                       path_to_model,
                       path_to_topic_keys,
                       path_to_topic_distributions,
+                      path_to_word_weights,
                       num_topics):
 
     print('Training topic model...')
@@ -133,7 +137,9 @@ def train_topic_model(path_to_mallet,
                                           + ' --num-topics ' + str(num_topics) \
                                           + ' --inferencer-filename "' + path_to_model + '"' \
                                           + ' --output-topic-keys "' + path_to_topic_keys + '"' \
-                                          + ' --output-doc-topics "' + path_to_topic_distributions + '"')
+                                          + ' --output-doc-topics "' + path_to_topic_distributions + '"' \
+                                          + ' --topic-word-weights-file "' + path_to_word_weights + '"' \
+                                          + ' --optimize-interval 10')
 
     print('Complete')
 
@@ -159,6 +165,24 @@ def load_training_ids(topic_distributions_path):
             instance_id, distribution = (line.split('\t')[1], line.split('\t')[2:])
             training_ids.append(instance_id)
     return training_ids
+
+
+def load_topic_word_distributions(word_weight_path):
+    
+    topic_word_weight_dict = defaultdict(lambda: defaultdict(float))
+    topic_sum_dict = defaultdict(float)
+    with open(word_weight_path,'r') as f:       
+        for _line in f:        
+            _topic, _word, _weight = _line.split('\t')
+            topic_word_weight_dict[_topic][_word] = float(_weight)
+            topic_sum_dict[_topic] += float(_weight)
+
+    topic_word_probability_dict = defaultdict(lambda: defaultdict(float))
+    for _topic, _word_weight_dict in topic_word_weight_dict.items():
+        for _word, _weight in _word_weight_dict.items():
+            topic_word_probability_dict[_topic][_word] = _weight / topic_sum_dict[_topic]
+
+    return topic_word_probability_dict
 
 
 def get_top_docs(training_data, topic_distributions, topic_index, n=5):
