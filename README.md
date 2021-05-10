@@ -88,7 +88,7 @@ Imports the training data into MALLET formatted data that can be used for traini
 
 <br>
 
-#### `train_topic_model(path_to_mallet, path_to_formatted_training_data, path_to_model, path_to_topic_key, path_to_topic_distributions, num_topics)`
+#### `train_topic_model(path_to_mallet, path_to_formatted_training_data, path_to_model, path_to_topic_key, path_to_topic_distributions, path_to_word_weights, num_topics)`
 
 Trains an LDA topic model using MALLET.
 
@@ -99,6 +99,7 @@ Trains an LDA topic model using MALLET.
 | `path_to_model` | string | Path to where the model should be stored. |
 | `path_to_topic_key` | string | Path to where the topic keys should be stored. |
 | `path_to_topic_distributions` | string | Path to where the topic distributions should be stored. |
+| `path_to_word_weights` | string | Path to where the word weights should be stored. |
 | `num_topics` | integer | The number of topics to use for training. |
 
 <br> 
@@ -133,6 +134,17 @@ Loads the training IDs. This is either a list of sequential integers or the user
 | ------------------ | ----------------- | -------------------------------- |
 | `topic_distributions_path` | string | Path to where the topic distributions are stored. |
 | RETURNS | list of lists of strings | List of training IDs in the same order as the topic distributions. |
+
+<br>
+
+#### `load_topic_word_distributions(word_weight_path)`
+
+Loads the topic word distributions. These are the probabilities for each word for each topic.
+
+| Name               | Type              | Description                      |
+| ------------------ | ----------------- | -------------------------------- |
+| `word_weight_path` | string | Path to where the word weights are stored. |
+| RETURNS | defaultdict of defaultdict of float | Map of topics to words to probabilities. |
 
 <br>
 
