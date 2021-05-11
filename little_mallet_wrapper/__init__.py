@@ -14,5 +14,6 @@ from .little_mallet_wrapper import (
   infer_topics,
   plot_topics_over_time,
   quick_train_topic_model,
-  get_js_divergence
+  get_js_divergence_documents,
+  get_js_divergence_topics
 )

@@ -139,6 +139,7 @@ def train_topic_model(path_to_mallet,
                                           + ' --output-topic-keys "' + path_to_topic_keys + '"' \
                                           + ' --output-doc-topics "' + path_to_topic_distributions + '"' \
                                           + ' --topic-word-weights-file "' + path_to_word_weights + '"' \
+                                          + ' --diagnostics-file' \
                                           + ' --optimize-interval 10')
 
     print('Complete')
@@ -324,5 +325,12 @@ def plot_topics_over_time(topic_distributions, topic_keys, times, topic_index, o
     plt.show()
 
 
-def get_js_divergence(topic_index_1, topic_index_2, topic_distributions):
-    return jensenshannon(topic_distributions[topic_index_1], topic_distributions[topic_index_2])
+def get_js_divergence_documents(document_index_1, document_index_2, topic_distributions):
+    return jensenshannon(topic_distributions[document_index_1], topic_distributions[document_index_2])
+
+
+def get_js_divergence_topics(topic_index_1, topic_index_2, topic_word_probability_dict):
+    vocab = list(set(list(topic_word_probability_dict[topic_index_1].keys()) + list(topic_word_probability_dict[topic_index_2].keys())))
+    dist1 = [topic_word_probability_dict[topic_index_1][w] for w in vocab]
+    dist2 = [topic_word_probability_dict[topic_index_2][w] for w in vocab]
+    return jensenshannon(dist1, dist2)
