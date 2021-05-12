@@ -72,6 +72,7 @@ def quick_train_topic_model(path_to_mallet,
     path_to_topic_keys              = output_directory_path + '/mallet.topic_keys.' + str(num_topics)
     path_to_topic_distributions     = output_directory_path + '/mallet.topic_distributions.' + str(num_topics)
     path_to_word_weights            = output_directory_path + '/mallet.word_weights.' + str(num_topics)
+    path_to_diagnostics             = output_directory_path + '/mallet.diagnostics.' + str(num_topics) + '.xml'
 
     import_data(path_to_mallet,
                 path_to_training_data,
@@ -83,6 +84,7 @@ def quick_train_topic_model(path_to_mallet,
                       path_to_topic_keys,
                       path_to_topic_distributions,
                       path_to_word_weights,
+                      path_to_diagnostics,
                       num_topics)
     
     topic_keys = load_topic_keys(path_to_topic_keys)
@@ -130,6 +132,7 @@ def train_topic_model(path_to_mallet,
                       path_to_topic_keys,
                       path_to_topic_distributions,
                       path_to_word_weights,
+                      path_to_diagnostics,
                       num_topics):
 
     print('Training topic model...')
@@ -139,7 +142,7 @@ def train_topic_model(path_to_mallet,
                                           + ' --output-topic-keys "' + path_to_topic_keys + '"' \
                                           + ' --output-doc-topics "' + path_to_topic_distributions + '"' \
                                           + ' --topic-word-weights-file "' + path_to_word_weights + '"' \
-                                          + ' --diagnostics-file' \
+                                          + ' --diagnostics-file "' + path_to_diagnostics + '"' \
                                           + ' --optimize-interval 10')
 
     print('Complete')
@@ -181,7 +184,7 @@ def load_topic_word_distributions(word_weight_path):
     topic_word_probability_dict = defaultdict(lambda: defaultdict(float))
     for _topic, _word_weight_dict in topic_word_weight_dict.items():
         for _word, _weight in _word_weight_dict.items():
-            topic_word_probability_dict[_topic][_word] = _weight / topic_sum_dict[_topic]
+            topic_word_probability_dict[int(_topic)][_word] = _weight / topic_sum_dict[_topic]
 
     return topic_word_probability_dict
 
