@@ -88,7 +88,7 @@ Imports the training data into MALLET formatted data that can be used for traini
 
 <br>
 
-#### `train_topic_model(path_to_mallet, path_to_formatted_training_data, path_to_model, path_to_topic_key, path_to_topic_distributions, path_to_word_weights, num_topics)`
+#### `train_topic_model(path_to_mallet, path_to_formatted_training_data, path_to_model, path_to_topic_key, path_to_topic_distributions, path_to_word_weights, path_to_diagnostics, num_topics)`
 
 Trains an LDA topic model using MALLET.
 
@@ -100,6 +100,7 @@ Trains an LDA topic model using MALLET.
 | `path_to_topic_key` | string | Path to where the topic keys should be stored. |
 | `path_to_topic_distributions` | string | Path to where the topic distributions should be stored. |
 | `path_to_word_weights` | string | Path to where the word weights should be stored. |
+| `path_to_diagnostics` | string | Path to where the XML diagnostics file should be stored. |
 | `num_topics` | integer | The number of topics to use for training. |
 
 <br> 
@@ -231,7 +232,20 @@ Creates lineplots, one for each topic, showing the mean topic probability over d
 
 <br>
 
-#### `get_js_divergence(topic_index_1, topic_index_2, topic_distributions)`
+#### `get_js_divergence_documents(document_index_1, document_index_2, topic_distributions)`
+
+Calculates the Jensen-Shannon divergence between the two target topic distributions.
+
+| Name               | Type              | Description                      |
+| ------------------ | ----------------- | -------------------------------- |
+| `document_index_1` | integer | Index of the first target document distribution. |
+| `document_index_2` | integer | Index of the second target document distribution. |
+| `topic_distributions` | list of lists of integers | Topic distribution (list of probabilities) for each document. |
+| RETURNS | float | Jensen-Shannon divergence of the requested topic distributions. |
+
+<br>
+
+#### `get_js_divergence_topics(topic_index_1, topic_index_2, topic_distributions)`
 
 Calculates the Jensen-Shannon divergence between the two target topic distributions.
 
