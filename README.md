@@ -243,7 +243,7 @@ Calculates the Jensen-Shannon divergence between the two target topic distributi
 
 <br>
 
-#### `get_js_divergence_topics(topic_index_1, topic_index_2, topic_distributions)`
+#### `get_js_divergence_topics(topic_index_1, topic_index_2, topic_word_probability_dict)`
 
 Calculates the Jensen-Shannon divergence between the two target topic distributions.
 
@@ -251,7 +251,7 @@ Calculates the Jensen-Shannon divergence between the two target topic distributi
 | ------------------ | ----------------- | -------------------------------- |
 | `topic_index_1` | integer | Index of the first target topic distribution. |
 | `topic_index_2` | integer | Index of the second target topic distribution. |
-| `topic_distributions` | list of lists of integers | Topic distribution (list of probabilities) for each document. |
+| `topic_word_probability_dict` | defaultdict of defaultdict of float | Map of topics to words to probabilities. |
 | RETURNS | float | Jensen-Shannon divergence of the requested topic distributions. |
 
 <br>
