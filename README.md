@@ -27,6 +27,8 @@ This is a little Python wrapper around the topic modeling functions of [MALLET](
 
 See demo.ipynb for a demonstration of how to use the functions in little-mallet-wrapper.
 
+To get started quickly, use the `quick_train_topic_model()` function with your MALLET path, an output directory (where you want the model to save everything), the number of topics, and a list of strings (your training data). 
+
 <br>
 
 ## Documentation
