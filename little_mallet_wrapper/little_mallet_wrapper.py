@@ -39,7 +39,6 @@ def print_dataset_stats(training_data):
 
 def process_string(text, 
                    lowercase=True, 
-                   remove_short_words=True, 
                    remove_stop_words=True, 
                    remove_punctuation=True, 
                    numbers='replace', 
@@ -55,8 +54,6 @@ def process_string(text,
         text = re.sub(r'[^\sA-Za-z0-9À-ÖØ-öø-ÿЀ-ӿ/]', ' ', text)
     if remove_stop_words:
         text = ' '.join([word for word in text.split() if word not in stop_words + stop_words_extra])
-    if remove_short_words:
-        text = ' '.join([word for word in text.split() if not len(word) <= 2])
     text = ' '.join(text.split())
     return text
 
