@@ -10,6 +10,8 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 sns.set(style='ticks', font_scale=1.2)
 
+from typing import DefaultDict, List, Optional, Sequence, Tuple
+
 
 STOPS = ['i', 'me', 'my', 'myself', 'we', 'our', 'ours', 'ourselves', 'you', 'your', 'yours',
          'yourself', 'yourselves', 'he', 'him', 'his', 'himself', 'she', 'her', 'hers',
@@ -25,9 +27,7 @@ STOPS = ['i', 'me', 'my', 'myself', 'we', 'our', 'ours', 'ourselves', 'you', 'yo
          'than', 'too', 'very', 's', 't', 'can', 'will', 'just', 'don', 'should', 'now', 've', 'll', 'amp']
 
 
-
-def print_dataset_stats(training_data):
-
+def print_dataset_stats(training_data: Sequence[str]) -> None:
     num_documents = len(training_data)
     mean_num_words = np.mean([len(d.split()) for d in training_data])
     vocab_size = len(list(set([w for d in training_data for w in d.split()])))
@@ -37,13 +37,13 @@ def print_dataset_stats(training_data):
     print('Vocabulary Size:', vocab_size)
 
 
-def process_string(text, 
-                   lowercase=True, 
-                   remove_stop_words=True, 
-                   remove_punctuation=True, 
-                   numbers='replace', 
-                   stop_words=STOPS,
-                   stop_words_extra=[]):
+def process_string(text: str,
+                   lowercase: bool = True,
+                   remove_stop_words: bool = True,
+                   remove_punctuation: bool = True,
+                   numbers: str = 'replace',
+                   stop_words: List[str] = STOPS,
+                   stop_words_extra: List[str] = []) -> str:
     if lowercase:
         text = text.lower()
     if numbers == 'replace':
@@ -58,10 +58,10 @@ def process_string(text,
     return text
 
 
-def quick_train_topic_model(path_to_mallet,
-                            output_directory_path,
-                            num_topics,
-                            training_data):
+def quick_train_topic_model(path_to_mallet: str,
+                            output_directory_path: str,
+                            num_topics: int,
+                            training_data: Sequence[str]) -> Tuple[List[List[str]], List[List[float]]]:
 
     path_to_training_data           = output_directory_path + '/training.txt'
     path_to_formatted_training_data = output_directory_path + '/mallet.training'
@@ -74,7 +74,7 @@ def quick_train_topic_model(path_to_mallet,
     import_data(path_to_mallet,
                 path_to_training_data,
                 path_to_formatted_training_data,
-                training_data)                  
+                training_data)              
     train_topic_model(path_to_mallet,
                       path_to_formatted_training_data,
                       path_to_model,
@@ -83,19 +83,19 @@ def quick_train_topic_model(path_to_mallet,
                       path_to_word_weights,
                       path_to_diagnostics,
                       num_topics)
-    
+
     topic_keys = load_topic_keys(path_to_topic_keys)
     topic_distributions = load_topic_distributions(path_to_topic_distributions)
 
     return topic_keys, topic_distributions
 
 
-def import_data(path_to_mallet,
-                path_to_training_data,
-                path_to_formatted_training_data,
-                training_data,
-                training_ids=None,
-                use_pipe_from=None):
+def import_data(path_to_mallet: str,
+                path_to_training_data: str,
+                path_to_formatted_training_data: str,
+                training_data: Sequence[str],
+                training_ids: Optional[Sequence[str]] = None,
+                use_pipe_from: Optional[str] = None) -> None:
 
     training_data_file = open(path_to_training_data, 'w')
     for i, d in enumerate(training_data):
@@ -112,7 +112,7 @@ def import_data(path_to_mallet,
                                              + ' --keep-sequence' \
                                              + ' --use-pipe-from "' + use_pipe_from + '"'
                                              + ' --preserve-case')
-        
+
     else:
         print('Importing data...')
         os.system(path_to_mallet + ' import-file --input "' + path_to_training_data + '"' 
@@ -123,14 +123,14 @@ def import_data(path_to_mallet,
     print('Complete')
 
 
-def train_topic_model(path_to_mallet,
-                      path_to_formatted_training_data,
-                      path_to_model,
-                      path_to_topic_keys,
-                      path_to_topic_distributions,
-                      path_to_word_weights,
-                      path_to_diagnostics,
-                      num_topics):
+def train_topic_model(path_to_mallet: str,
+                      path_to_formatted_training_data: str,
+                      path_to_model: str,
+                      path_to_topic_keys: str,
+                      path_to_topic_distributions: str,
+                      path_to_word_weights: str,
+                      path_to_diagnostics: str,
+                      num_topics: int) -> None:
 
     print('Training topic model...')
     os.system(path_to_mallet + ' train-topics --input "' + path_to_formatted_training_data + '"' \
@@ -145,40 +145,39 @@ def train_topic_model(path_to_mallet,
     print('Complete')
 
 
-def load_topic_keys(topic_keys_path):
+def load_topic_keys(topic_keys_path: str) -> List[List[str]]:
     return [line.split('\t')[2].split() for line in open(topic_keys_path, 'r')]
 
 
-def load_topic_distributions(topic_distributions_path):
+def load_topic_distributions(topic_distributions_path: str) -> List[List[float]]:
     topic_distributions = []
     for line in open(topic_distributions_path, 'r'):
         if line.split()[0] != '#doc':
-            instance_id, distribution = (line.split('\t')[1], line.split('\t')[2:])
-            distribution = [float(p) for p in distribution]
+            distribution = [float(p) for p in line.split('\t')[2:]]
             topic_distributions.append(distribution)
     return topic_distributions
 
 
-def load_training_ids(topic_distributions_path):
+def load_training_ids(topic_distributions_path: str) -> List[str]:
     training_ids = []
     for line in open(topic_distributions_path, 'r'):
         if line.split()[0] != '#doc':
-            instance_id, distribution = (line.split('\t')[1], line.split('\t')[2:])
+            instance_id = line.split('\t')[1]
             training_ids.append(instance_id)
     return training_ids
 
 
-def load_topic_word_distributions(word_weight_path):
-    
-    topic_word_weight_dict = defaultdict(lambda: defaultdict(float))
-    topic_sum_dict = defaultdict(float)
-    with open(word_weight_path,'r') as f:       
-        for _line in f:        
-            _topic, _word, _weight = _line.split('\t')
-            topic_word_weight_dict[_topic][_word] = float(_weight)
-            topic_sum_dict[_topic] += float(_weight)
+def load_topic_word_distributions(word_weight_path: str) -> DefaultDict[int, DefaultDict[str, float]]:
+    topic_word_weight_dict: DefaultDict[str, DefaultDict[str, float]] = defaultdict(lambda: defaultdict(float))
+    topic_sum_dict: DefaultDict[str, float] = defaultdict(float)
+    with open(word_weight_path, 'r') as f:
+        for _line in f:
+            _topic, _word, _weight_str = _line.split('\t')
+            _weight = float(_weight_str)
+            topic_word_weight_dict[_topic][_word] = _weight
+            topic_sum_dict[_topic] += _weight
 
-    topic_word_probability_dict = defaultdict(lambda: defaultdict(float))
+    topic_word_probability_dict: DefaultDict[int, DefaultDict[str, float]] = defaultdict(lambda: defaultdict(float))
     for _topic, _word_weight_dict in topic_word_weight_dict.items():
         for _word, _weight in _word_weight_dict.items():
             topic_word_probability_dict[int(_topic)][_word] = _weight / topic_sum_dict[_topic]
@@ -186,20 +185,22 @@ def load_topic_word_distributions(word_weight_path):
     return topic_word_probability_dict
 
 
-def get_top_docs(training_data, topic_distributions, topic_index, n=5):
-    sorted_data = sorted([(_distribution[topic_index], _document) 
-                          for _distribution, _document 
+def get_top_docs(training_data: Sequence[str],
+                 topic_distributions: Sequence[Sequence[float]],
+                 topic_index: int,
+                 n: int = 5) -> List[Tuple[float, str]]:
+    sorted_data = sorted([(_distribution[topic_index], _document)
+                          for _distribution, _document
                           in zip(topic_distributions, training_data)], reverse=True)
     return sorted_data[:n]
 
 
-def plot_categories_by_topics_heatmap(labels, 
-                                      topic_distributions, 
-                                      topic_keys, 
-                                      output_path=None,
-                                      target_labels=None,
-                                      dim=None):
-    
+def plot_categories_by_topics_heatmap(labels: Sequence[str],
+                                      topic_distributions: Sequence[Sequence[int]],
+                                      topic_keys: Sequence[Sequence[str]],
+                                      output_path: Optional[str] = None,
+                                      target_labels: Optional[Sequence[str]] = None,
+                                      dim: Optional[Tuple[int, int]] = None) -> None:
     # Combine the labels and distributions into a list of dictionaries.
     dicts_to_plot = []
     for _label, _distribution in zip(labels, topic_distributions):
@@ -214,7 +215,7 @@ def plot_categories_by_topics_heatmap(labels,
     df_wide = df_to_plot.pivot_table(index='Category', 
                                      columns='Topic', 
                                      values='Probability')
-    df_norm_col=(df_wide-df_wide.mean())/df_wide.std()
+    df_norm_col = (df_wide - df_wide.mean()) / df_wide.std()
         
     # Show the final plot.
     if dim:
@@ -228,19 +229,18 @@ def plot_categories_by_topics_heatmap(labels,
     if output_path:
         plt.savefig(output_path)
     plt.show()
-    
 
-def plot_categories_by_topic_boxplots(labels, 
-                                      topic_distributions, 
-                                      topic_keys, 
-                                      target_topic_index,
-                                      output_path=None,
-                                      target_labels=None,
-                                      dim=None):
-    
+
+def plot_categories_by_topic_boxplots(labels: Sequence[str],
+                                      topic_distributions: Sequence[Sequence[int]],
+                                      topic_keys: Sequence[Sequence[str]],
+                                      target_topic_index: int,
+                                      output_path: Optional[str] = None,
+                                      target_labels: Optional[Sequence[str]] = None,
+                                      dim: Optional[Tuple[int, int]] = None) -> None:
     if not target_labels:
         target_labels = list(set(labels))
-                   
+
     # Combine the labels and distributions into a dataframe.
     dicts_to_plot = []
     for _label, _distribution in zip(labels, topic_distributions):
@@ -267,29 +267,29 @@ def plot_categories_by_topic_boxplots(labels,
     plt.show()
 
 
-def divide_training_data(documents, num_chunks=10):
-
+def divide_training_data(documents: Sequence[str],
+                         num_chunks: int = 10) -> Tuple[List[str], List[int], List[float]]:
     divided_documents = []
     document_ids = []
     times = []
 
     for doc_id, text in enumerate(documents):
 
-        t = 0
+        t = 0.0
 
         for _chunk in np.array_split(np.asarray(text.split()), num_chunks): 
             divided_documents.append(' '.join(_chunk))
             document_ids.append(doc_id)
             times.append(t)
             t += 0.1
-        
+
     return divided_documents, document_ids, times
 
 
-def infer_topics(path_to_mallet,
-                 path_to_original_model,
-                 path_to_new_formatted_training_data,
-                 path_to_new_topic_distributions):
+def infer_topics(path_to_mallet: str,
+                 path_to_original_model: str,
+                 path_to_new_formatted_training_data: str,
+                 path_to_new_topic_distributions: str) -> None:
 
     print('Inferring topics using pre-trained model...')
     os.system(path_to_mallet + ' infer-topics --input "' + path_to_new_formatted_training_data + '"' \
@@ -299,8 +299,11 @@ def infer_topics(path_to_mallet,
     print('Complete')
 
 
-def plot_topics_over_time(topic_distributions, topic_keys, times, topic_index, output_path=None):
-    
+def plot_topics_over_time(topic_distributions: Sequence[Sequence[int]],
+                          topic_keys: Sequence[Sequence[str]],
+                          times: Sequence[float],
+                          topic_index: int,
+                          output_path: Optional[str] = None) -> None:
     data_dicts = []
     for j, _distribution in enumerate(topic_distributions):        
         for _topic, _probability in enumerate(_distribution):
@@ -325,11 +328,15 @@ def plot_topics_over_time(topic_distributions, topic_keys, times, topic_index, o
     plt.show()
 
 
-def get_js_divergence_documents(document_index_1, document_index_2, topic_distributions):
+def get_js_divergence_documents(document_index_1: int,
+                                document_index_2: int,
+                                topic_distributions: Sequence[Sequence[int]]) -> float:
     return jensenshannon(topic_distributions[document_index_1], topic_distributions[document_index_2])
 
 
-def get_js_divergence_topics(topic_index_1, topic_index_2, topic_word_probability_dict):
+def get_js_divergence_topics(topic_index_1: int,
+                             topic_index_2: int,
+                             topic_word_probability_dict: DefaultDict[int, DefaultDict[str, float]]) -> float:
     vocab = list(set(list(topic_word_probability_dict[topic_index_1].keys()) + list(topic_word_probability_dict[topic_index_2].keys())))
     dist1 = [topic_word_probability_dict[topic_index_1][w] for w in vocab]
     dist2 = [topic_word_probability_dict[topic_index_2][w] for w in vocab]
