@@ -132,14 +132,13 @@ def train_topic_model(path_to_mallet,
                       path_to_diagnostics,
                       num_topics,
                       num_iterations=100,
-                      burnin=100
+                      
                       ):
 
     print('Training topic model...')
     os.system(path_to_mallet + ' train-topics --input "' + path_to_formatted_training_data + '"' \
                                           + ' --num-topics ' + str(num_topics) \
                                           + ' --num-iterations ' + str(num_iterations) \
-                                          + ' --burn-in ' + str(burnin) \
                                           + ' --inferencer-filename "' + path_to_model + '"' \
                                           + ' --output-topic-keys "' + path_to_topic_keys + '"' \
                                           + ' --output-doc-topics "' + path_to_topic_distributions + '"' \
