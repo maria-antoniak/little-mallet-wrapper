@@ -131,9 +131,7 @@ def train_topic_model(path_to_mallet,
                       path_to_word_weights,
                       path_to_diagnostics,
                       num_topics,
-                      num_iterations=100,
-                      
-                      ):
+                      num_iterations=100):
 
     print('Training topic model...')
     os.system(path_to_mallet + ' train-topics --input "' + path_to_formatted_training_data + '"' \
