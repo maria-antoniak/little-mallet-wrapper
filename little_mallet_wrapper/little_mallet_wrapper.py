@@ -130,11 +130,13 @@ def train_topic_model(path_to_mallet,
                       path_to_topic_distributions,
                       path_to_word_weights,
                       path_to_diagnostics,
-                      num_topics):
+                      num_topics,
+                      num_iterations=100):
 
     print('Training topic model...')
     os.system(path_to_mallet + ' train-topics --input "' + path_to_formatted_training_data + '"' \
                                           + ' --num-topics ' + str(num_topics) \
+                                          + ' --num-iterations ' + str(num_iterations) \
                                           + ' --inferencer-filename "' + path_to_model + '"' \
                                           + ' --output-topic-keys "' + path_to_topic_keys + '"' \
                                           + ' --output-doc-topics "' + path_to_topic_distributions + '"' \
@@ -289,11 +291,12 @@ def divide_training_data(documents, num_chunks=10):
 def infer_topics(path_to_mallet,
                  path_to_original_model,
                  path_to_new_formatted_training_data,
-                 path_to_new_topic_distributions):
+                 path_to_new_topic_distributions,
+                 num_iterations=100):
 
     print('Inferring topics using pre-trained model...')
     os.system(path_to_mallet + ' infer-topics --input "' + path_to_new_formatted_training_data + '"' \
-                                          + ' --num-iterations 100' \
+                                          + ' --num-iterations "' + str(num_iterations) + '"' \
                                           + ' --inferencer "' + path_to_original_model + '"' \
                                           + ' --output-doc-topics "' + path_to_new_topic_distributions + '"')
     print('Complete')
